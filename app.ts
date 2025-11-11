@@ -4,6 +4,7 @@ import Bar from "./modules/Bar"
 
 app.start({
   css: style,
+  icons: `${SRC}/assets/icons`,
   main() {
     app.get_monitors().map(Bar)
   },

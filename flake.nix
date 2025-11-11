@@ -48,6 +48,7 @@
       notifd
       tray
       wireplumber
+      battery
     ];
 
     extraPackages =
