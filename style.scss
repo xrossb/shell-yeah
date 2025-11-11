@@ -1,0 +1,50 @@
+// https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-4-20/gtk/theme/Default/_colors-public.scss
+$fg-color: #{"@theme_fg_color"};
+$bg-color: #{"@theme_bg_color"};
+
+* {
+  font-family: "monospace";
+  font-size: 14px;
+}
+
+window.Bar {
+  background: linear-gradient(to bottom, rgba(from $bg-color r g b / 20%), transparent);
+  color: $fg-color;
+  font-weight: bold;
+  text-shadow: 0 0 4px $bg-color;
+
+  button {
+    background: transparent;
+    padding: 0;
+  }
+}
+
+.workspace {
+  min-width: 24px;
+
+  &.active {
+    background: #444444;
+    box-shadow: inset 0 -2px #ffffff;
+  }
+
+  &:hover {
+    box-shadow: inset 0 -2px #ffffff;
+  }
+}
+
+// window.Bar {
+//   background: transparent;
+//   color: $fg-color;
+//   font-weight: bold;
+
+//   > centerbox {
+//     background: $bg-color;
+//     border-radius: 10px;
+//     margin: 8px;
+//   }
+
+//   button {
+//     border-radius: 8px;
+//     margin: 2px;
+//   }
+// }
