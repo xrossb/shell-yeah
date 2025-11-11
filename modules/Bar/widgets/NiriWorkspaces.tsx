@@ -14,7 +14,7 @@ export default function NiriWorkspaces({
   )
 
   return (
-    <box>
+    <box name="workspaces">
       <For each={outputs}>{(output) => <Workspaces output={output} />}</For>
     </box>
   )
@@ -24,7 +24,7 @@ function Workspaces({ output }: { output: AstalNiri.Output }) {
   const workspaces = createBinding(output, "workspaces")
 
   return (
-    <box class="workspaces">
+    <box>
       <For each={workspaces}>
         {(workspace) => <WorkspaceButton workspace={workspace} />}
       </For>
@@ -34,24 +34,20 @@ function Workspaces({ output }: { output: AstalNiri.Output }) {
 
 function WorkspaceButton({ workspace }: { workspace: AstalNiri.Workspace }) {
   const classes = createBinding(niri, "focusedWorkspace").as((focused) => {
-    const classes = ["workspace"]
-
     if (focused.id === workspace.id) {
-      classes.push("active")
+      return ["active"]
     }
 
-    return classes
+    return []
   })
 
   return (
-    <box cssClasses={classes} hexpand={false}>
-      <label label={workspace.idx.toString()} hexpand />
-      <Gtk.GestureClick
-        onPressed={(ctrl) => {
-          const button = ctrl.get_current_button()
-          if (button === Gdk.BUTTON_PRIMARY) workspace.focus()
-        }}
-      />
-    </box>
+    <button
+      cssClasses={classes}
+      label={workspace.idx.toString()}
+      onClicked={() => {
+        workspace.focus()
+      }}
+    />
   )
 }
