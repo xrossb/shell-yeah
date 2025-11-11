@@ -9,19 +9,19 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
   return (
     <window
       visible
-      class="Bar"
+      name="bar"
       gdkmonitor={gdkmonitor}
       exclusivity={Astal.Exclusivity.EXCLUSIVE}
       anchor={TOP | LEFT | RIGHT}
     >
       <centerbox heightRequest={30}>
-        <box $type="start">
+        <box class="left" $type="start">
           <NiriWorkspaces gdkmonitor={gdkmonitor} />
         </box>
-        <box $type="center">
+        <box class="center" $type="center">
           <Clock />
         </box>
-        <box $type="end">
+        <box class="right" $type="end">
           <Tray />
         </box>
       </centerbox>

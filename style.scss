@@ -24,11 +24,15 @@ $fg-color: $base05;
   font-size: 14px;
 }
 
-window.Bar {
+#bar {
   background: linear-gradient(to bottom, rgba($bg-color, 20%), transparent);
   color: $fg-color;
   font-weight: bold;
   text-shadow: 0 0 4px $bg-color;
+
+  .right {
+    margin-right: 8px;
+  }
 
   button {
     background: transparent;
