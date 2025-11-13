@@ -60,3 +60,23 @@ $fg-color: $base05;
     box-shadow: inset 0 -3px $base0C;
   }
 }
+
+popover {
+  min-width: 240px;
+}
+
+popover contents,
+popover arrow {
+  font-weight: bold;
+  color: $fg-color;
+  background: $bg-color;
+  border-color: $base01;
+
+  modelbutton:selected {
+    background-color: $base02;
+  }
+
+  separator {
+    background-color: $base03;
+  }
+}
