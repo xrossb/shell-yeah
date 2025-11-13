@@ -82,7 +82,7 @@ function batteryIcon({ percentage, state }: BatteryInfo) {
     case AstalBattery.State.FULLY_CHARGED:
       return "sy-plug-symbolic"
     default:
-      return icons[Math.floor(percentage * icons.length)]
+      return icons[Math.round(percentage * (icons.length - 1))]
   }
 }
 
