@@ -17,38 +17,17 @@ const icons = [
 
 export default function Battery() {
   const isPresent = createBinding(battery, "isPresent")
-
-  const batteryInfo = createComputed([
-    createBinding(battery, "percentage"),
-    createBinding(battery, "charging"),
-    createBinding(battery, "energyRate"),
-  ]).as(([percentage, charging, energyRate]) => ({
-    percentage,
-    charging,
-    energyRate,
-  }))
-  type BatteryInfo = typeof batteryInfo extends Accessor<infer T> ? T : never
-
-  function batteryIcon({ percentage, charging }: BatteryInfo) {
-    if (charging) {
-      return "sy-battery-bolt-symbolic"
-    }
-
-    return icons[Math.floor(percentage * icons.length)]
-  }
-
-  function batteryTooltip({ energyRate }: BatteryInfo) {
-    return [
-      `draw: ${energyRate.toFixed(2)}W`,
-      // TODO: battery health, time to full/empty.
-    ].join("\n")
-  }
+  const batteryInfo = batteryBinding(battery)
 
   return (
     <With value={isPresent}>
       {(isPresent) =>
         isPresent && (
-          <box spacing={8} tooltipText={batteryInfo(batteryTooltip)}>
+          <box
+            name="battery"
+            spacing={4}
+            tooltipText={batteryInfo(batteryTooltip)}
+          >
             <image iconName={batteryInfo(batteryIcon)} pixelSize={20} />
             <label
               label={batteryInfo(
@@ -60,4 +39,87 @@ export default function Battery() {
       }
     </With>
   )
+}
+
+type BatteryInfo = ReturnType<typeof batteryBinding> extends Accessor<infer T>
+  ? T
+  : never
+
+function batteryBinding(battery: AstalBattery.Device) {
+  return createComputed([
+    createBinding(battery, "percentage"),
+    createBinding(battery, "state"),
+    createBinding(battery, "energyRate"),
+    createBinding(battery, "energy"),
+    createBinding(battery, "energyFull"),
+    createBinding(battery, "timeToFull"),
+    createBinding(battery, "timeToEmpty"),
+  ]).as(
+    ([
+      percentage,
+      state,
+      energyRate,
+      energy,
+      energyFull,
+      timeToFull,
+      timeToEmpty,
+    ]) => ({
+      percentage,
+      state,
+      energyRate,
+      energy,
+      energyFull,
+      timeToFull,
+      timeToEmpty,
+    })
+  )
+}
+
+function batteryIcon({ percentage, state }: BatteryInfo) {
+  switch (state) {
+    case AstalBattery.State.CHARGING:
+      return "sy-bolt-symbolic"
+    case AstalBattery.State.FULLY_CHARGED:
+      return "sy-plug-symbolic"
+    default:
+      return icons[Math.floor(percentage * icons.length)]
+  }
+}
+
+function batteryTooltip({
+  energyRate,
+  energy,
+  energyFull,
+  timeToFull,
+  timeToEmpty,
+}: BatteryInfo) {
+  const items = [
+    `capacity: ${energy.toFixed(2)}W / ${energyFull.toFixed(2)}W`,
+    `flow: ${energyRate.toFixed(2)}W`,
+  ]
+
+  if (timeToFull) {
+    items.push(``, `full in ${formatDuration(timeToFull)}`)
+  }
+
+  if (timeToEmpty) {
+    items.push(``, `empty in ${formatDuration(timeToEmpty)}`)
+  }
+
+  return items.join("\n")
+}
+
+function formatDuration(seconds: number) {
+  if (seconds < 60) {
+    return `${seconds}s`
+  }
+
+  const minutes = Math.floor(seconds / 60)
+
+  if (minutes < 60) {
+    return `${minutes}m`
+  }
+
+  const hours = Math.floor(minutes / 60)
+  return `${hours}h ${minutes % 60}m`
 }
