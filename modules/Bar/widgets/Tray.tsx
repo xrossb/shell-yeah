@@ -5,7 +5,9 @@ import { Gtk } from "ags/gtk4"
 const tray = AstalTray.get_default()
 
 export default function Tray() {
-  const items = createBinding(tray, "items").as((items) => items.toReversed())
+  const items = createBinding(tray, "items").as((items) =>
+    items.filter((i) => i.id).toReversed()
+  )
 
   function init(button: Gtk.MenuButton, item: AstalTray.TrayItem) {
     button.insert_action_group("dbusmenu", item.actionGroup)
@@ -19,6 +21,7 @@ export default function Tray() {
       <For each={items}>
         {(item) => (
           <menubutton
+            name="tray-item"
             $={(button) => init(button, item)}
             menuModel={item.menuModel}
             tooltipText={item.title}
