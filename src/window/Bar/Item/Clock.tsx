@@ -1,14 +1,12 @@
-import { Gtk } from "ags/gtk4"
 import { createPoll } from "ags/time"
-import GLib from "gi://GLib?version=2.0"
-
-const format = "%a, %d %b · %I:%M %p"
+import GLib from "gi://GLib"
+import { Config } from "@/config"
 
 export default function Clock() {
   const time = createPoll(
     "",
     1000,
-    () => GLib.DateTime.new_now_local().format(format) || ""
+    () => GLib.DateTime.new_now_local().format(Config.format.clock) || ""
   )
 
   return (

@@ -1,21 +1,10 @@
 import AstalBattery from "gi://AstalBattery"
 import { Accessor, createBinding, createComputed, With } from "ags"
+import { Config } from "@/config"
 
 const battery = AstalBattery.get_default()
 
-const icons = [
-  "sy-battery-alert-symbolic",
-  "sy-battery-7-symbolic",
-  "sy-battery-6-symbolic",
-  "sy-battery-5-symbolic",
-  "sy-battery-4-symbolic",
-  "sy-battery-3-symbolic",
-  "sy-battery-2-symbolic",
-  "sy-battery-1-symbolic",
-  "sy-battery-0-symbolic",
-]
-
-export default function Battery() {
+export default function BatteryIndicator() {
   const isPresent = createBinding(battery, "isPresent")
   const batteryInfo = batteryBinding(battery)
 
@@ -25,10 +14,13 @@ export default function Battery() {
         isPresent && (
           <box
             name="battery"
-            spacing={4}
+            spacing={Config.spacing.small}
             tooltipText={batteryInfo(batteryTooltip)}
           >
-            <image iconName={batteryInfo(batteryIcon)} pixelSize={20} />
+            <image
+              iconName={batteryInfo(batteryIcon)}
+              pixelSize={Config.sizing.indicatorIcon}
+            />
             <label
               label={batteryInfo(
                 (battery) => `${Math.floor(battery.percentage * 100)}%`
@@ -76,13 +68,17 @@ function batteryBinding(battery: AstalBattery.Device) {
 }
 
 function batteryIcon({ percentage, state }: BatteryInfo) {
+  const icons = Config.icon.battery
+
   switch (state) {
     case AstalBattery.State.CHARGING:
-      return "sy-bolt-symbolic"
+      return icons.charging
     case AstalBattery.State.FULLY_CHARGED:
-      return "sy-plug-symbolic"
+      return icons.plugged
     default:
-      return icons[Math.round(percentage * (icons.length - 1))]
+      return icons.draining[
+        Math.round(percentage * (icons.draining.length - 1))
+      ]
   }
 }
 

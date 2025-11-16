@@ -30,7 +30,7 @@
       libastal-niri.packages.${system}.niri.overrideAttrs
       (finalAttrs: prevAttrs: {
         nativeBuildInputs = with pkgs; [
-          wrapGAppsHook3
+          wrapGAppsHook4
           gobject-introspection
           meson
           pkg-config
@@ -49,6 +49,8 @@
       tray
       wireplumber
       battery
+      bluetooth
+      network
     ];
 
     extraPackages =
@@ -65,8 +67,9 @@
         src = ./.;
 
         nativeBuildInputs = with pkgs; [
-          wrapGAppsHook3
+          wrapGAppsHook4
           gobject-introspection
+          pkgs.pnpm.configHook
           ags.packages.${system}.default
         ];
 
@@ -91,6 +94,7 @@
           inherit extraPackages;
         })
         pkgs.entr
+        pkgs.pnpm
       ];
     };
   };

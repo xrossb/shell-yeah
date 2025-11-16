@@ -35,7 +35,7 @@ $fg-color: $base05;
   }
 }
 
-#tray button {
+#bar button {
   background: transparent;
   padding: 0;
   margin: 0;
@@ -44,9 +44,6 @@ $fg-color: $base05;
 
 #workspaces button {
   background: transparent;
-  padding: 0;
-  margin: 0;
-  border: none;
   border-radius: 0;
 
   min-width: 27px;
@@ -69,14 +66,14 @@ popover contents,
 popover arrow {
   font-weight: bold;
   color: $fg-color;
-  background: $bg-color;
-  border-color: $base01;
+  background: $base01;
+  border-color: $base02;
 
   modelbutton:selected {
-    background-color: $base02;
+    background-color: $base03;
   }
 
   separator {
-    background-color: $base03;
+    background-color: $base02;
   }
 }

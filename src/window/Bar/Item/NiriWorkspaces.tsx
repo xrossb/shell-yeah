@@ -1,4 +1,4 @@
-import { Gdk, Gtk } from "ags/gtk4"
+import { Gdk } from "ags/gtk4"
 import AstalNiri from "gi://AstalNiri"
 import { createBinding, For } from "ags"
 
