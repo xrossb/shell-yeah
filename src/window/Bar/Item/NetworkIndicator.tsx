@@ -29,15 +29,13 @@ export default function NetworkIndicator() {
     createBinding(network, "wired").as((wired) => !!wired),
     ...(network.wired
       ? [
-          createBinding(network.wired, "connection").as((conn) => !!conn),
           createBinding(network.wired, "internet").as(
             (internet) => internet === AstalNetwork.Internet.CONNECTED
           ),
         ]
       : []),
-  ]).as(([present, connected, internet]) => {
+  ]).as(([present, internet]) => {
     if (!present) return "unknown"
-    if (!connected) return "enabled"
     if (!internet) return "no-internet"
     return "connected"
   })
