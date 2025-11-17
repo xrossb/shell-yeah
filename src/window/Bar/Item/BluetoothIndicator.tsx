@@ -14,9 +14,11 @@ export default function BluetoothIndicator() {
       return "connected"
     }
   )
+  const visible = createBinding(bluetooth, "adapter").as((adapter) => !!adapter)
 
   return (
     <image
+      visible={visible}
       iconName={status.as(bluetoothIcon)}
       pixelSize={Config.sizing.indicatorIcon}
       tooltipText={status}
