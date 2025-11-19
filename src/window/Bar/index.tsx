@@ -9,6 +9,7 @@ import { Config } from "@/config"
 import NetworkIndicator from "./Item/NetworkIndicator"
 import VolumeIndicator from "./Item/VolumeIndicator"
 import BluetoothIndicator from "./Item/BluetoothIndicator"
+import BarItem from "./BarItem"
 
 export default function Bar(gdkmonitor: Gdk.Monitor) {
   const { TOP, LEFT, RIGHT } = Astal.WindowAnchor
@@ -66,11 +67,11 @@ function BarEnd() {
       <Tray />
       <BatteryIndicator />
       <NotificationIndicator />
-      <box spacing={Config.spacing.small}>
+      <BarItem spacing={Config.spacing.small}>
         <NetworkIndicator />
         <BluetoothIndicator />
         <VolumeIndicator />
-      </box>
+      </BarItem>
     </box>
   )
 }

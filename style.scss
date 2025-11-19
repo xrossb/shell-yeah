@@ -43,6 +43,24 @@ $fg-color: $base05;
   border: none;
 }
 
+#bar .bar-item {
+  padding: 0 7px;
+  margin: 0 -7px;
+  border-radius: 15px;
+  box-shadow: none;
+
+  button,
+  image {
+    color: inherit;
+    opacity: inherit;
+    -gtk-icon-filter: inherit;
+  }
+
+  &:hover {
+    background: rgba($base0C, 50%);
+  }
+}
+
 #workspaces button {
   background: transparent;
   border-radius: 0;

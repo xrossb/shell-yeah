@@ -1,6 +1,7 @@
 import AstalBattery from "gi://AstalBattery"
 import { Accessor, createBinding, createComputed, With } from "ags"
 import { Config } from "@/config"
+import BarItem from "../BarItem"
 
 const battery = AstalBattery.get_default()
 
@@ -12,7 +13,7 @@ export default function BatteryIndicator() {
     <With value={isPresent}>
       {(isPresent) =>
         isPresent && (
-          <box
+          <BarItem
             name="battery"
             spacing={Config.spacing.small}
             tooltipText={batteryInfo(batteryTooltip)}
@@ -26,7 +27,7 @@ export default function BatteryIndicator() {
                 (battery) => `${Math.floor(battery.percentage * 100)}%`
               )}
             />
-          </box>
+          </BarItem>
         )
       }
     </With>

@@ -1,6 +1,7 @@
 import { createPoll } from "ags/time"
 import GLib from "gi://GLib"
 import { Config } from "@/config"
+import BarItem from "../BarItem"
 
 export default function Clock() {
   const time = createPoll(
@@ -10,8 +11,8 @@ export default function Clock() {
   )
 
   return (
-    <box>
+    <BarItem>
       <label label={time} />
-    </box>
+    </BarItem>
   )
 }

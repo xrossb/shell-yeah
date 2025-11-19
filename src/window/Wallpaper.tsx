@@ -1,6 +1,5 @@
 import { Config } from "@/config"
 import { Astal, Gdk, Gtk } from "ags/gtk4"
-import { createPoll, Timer } from "ags/time"
 import GdkPixbuf from "gi://GdkPixbuf?version=2.0"
 import Gio from "gi://Gio"
 import { createState } from "gnim"
@@ -25,7 +24,7 @@ export default function Wallpaper(monitor: Gdk.Monitor) {
       layer={Astal.Layer.BACKGROUND}
       exclusivity={Astal.Exclusivity.IGNORE}
       anchor={TOP | BOTTOM | LEFT | RIGHT}
-      $={(self) => {
+      $={() => {
         const file = Gio.File.new_for_path(`${SRC}/assets/wallpaper.png`)
         file.load_bytes_async(null, (file, res) => {
           const [bytes, _] = file!.load_bytes_finish(res)
@@ -40,7 +39,7 @@ export default function Wallpaper(monitor: Gdk.Monitor) {
       <revealer
         revealChild={reveal}
         transitionType={Gtk.RevealerTransitionType.CROSSFADE}
-        transitionDuration={300}
+        transitionDuration={Config.animation.long}
       >
         {wallpaper}
       </revealer>

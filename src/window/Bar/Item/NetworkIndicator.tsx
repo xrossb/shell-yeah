@@ -5,48 +5,58 @@ import { createBinding, createComputed } from "ags"
 const network = AstalNetwork.get_default()
 
 export default function NetworkIndicator() {
-  const wifiState = createComputed([
-    createBinding(network, "wifi").as((wifi) => !!wifi),
-    ...(network.wifi
-      ? [
-          createBinding(network.wifi, "enabled"),
-          createBinding(network.wifi, "activeConnection").as((conn) => !!conn),
-          createBinding(network.wifi, "internet").as(
-            (internet) => internet === AstalNetwork.Internet.CONNECTED
-          ),
-        ]
-      : []),
-  ]).as(([present, enabled, connected, internet]) => {
-    if (!present) return "unknown"
-    if (!enabled) return "disabled"
-    if (!connected) return "enabled"
-    if (!internet) return "no-internet"
-    return "connected"
-  })
+  const wifiState = createComputed(
+    [
+      createBinding(network, "wifi").as((wifi) => !!wifi),
+      ...(network.wifi
+        ? [
+            createBinding(network.wifi, "enabled"),
+            createBinding(network.wifi, "activeConnection").as(
+              (conn) => !!conn
+            ),
+            createBinding(network.wifi, "internet").as(
+              (internet) => internet === AstalNetwork.Internet.CONNECTED
+            ),
+          ]
+        : []),
+    ],
+    (present, enabled, connected, internet) => {
+      if (!present) return "unknown"
+      if (!enabled) return "disabled"
+      if (!connected) return "enabled"
+      if (!internet) return "no-internet"
+      return "connected"
+    }
+  )
   const wifiStrength = createBinding(network.wifi, "strength")
 
-  const wiredState = createComputed([
-    createBinding(network, "wired").as((wired) => !!wired),
-    ...(network.wired
-      ? [
-          createBinding(network.wired, "internet").as(
-            (internet) => internet === AstalNetwork.Internet.CONNECTED
-          ),
-        ]
-      : []),
-  ]).as(([present, internet]) => {
-    if (!present) return "unknown"
-    if (!internet) return "no-internet"
-    return "connected"
-  })
+  const wiredState = createComputed(
+    [
+      createBinding(network, "wired").as((wired) => !!wired),
+      ...(network.wired
+        ? [
+            createBinding(network.wired, "internet").as(
+              (internet) => internet === AstalNetwork.Internet.CONNECTED
+            ),
+          ]
+        : []),
+    ],
+    (present, internet) => {
+      if (!present) return "unknown"
+      if (!internet) return "no-internet"
+      return "connected"
+    }
+  )
 
-  const visible = createComputed([wifiState, wiredState]).as(
-    ([wifiState, wiredState]) =>
+  const visible = createComputed(
+    [wifiState, wiredState],
+    (wifiState, wiredState) =>
       wifiState !== "unknown" || wiredState !== "unknown"
   )
 
-  const icon = createComputed([wifiState, wifiStrength, wiredState]).as(
-    ([wifiState, wifiStrength, wiredState]) => {
+  const icon = createComputed(
+    [wifiState, wifiStrength, wiredState],
+    (wifiState, wifiStrength, wiredState) => {
       if (wifiState === "connected" || wifiState === "no-internet") {
         if (wifiStrength <= 25) return "sy-wifi-weak-symbolic"
         if (wifiStrength <= 50) return "sy-wifi-mid-symbolic"
@@ -63,7 +73,13 @@ export default function NetworkIndicator() {
     }
   )
 
-  const opacity = wifiState.as((state) => (state === "enabled" ? 0.5 : 1))
+  const opacity = createComputed(
+    [wifiState, wiredState],
+    (wifiState, wiredState) => {
+      if (wifiState === "enabled" && wiredState === "unknown") return 0.5
+      return 1
+    }
+  )
 
   return (
     <image

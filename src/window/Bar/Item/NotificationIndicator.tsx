@@ -1,5 +1,7 @@
 import AstalNotifd from "gi://AstalNotifd"
-import { createBinding, For } from "ags"
+import { createBinding, With } from "ags"
+import { Config } from "@/config"
+import BarItem from "../BarItem"
 
 const notifd = AstalNotifd.get_default()
 
@@ -7,22 +9,28 @@ export default function NotificationIndicator() {
   const notifications = createBinding(notifd, "notifications")
 
   return (
-    <menubutton>
-      <box spacing={4}>
-        <image
-          iconName={notifications((n) =>
-            n.length
-              ? "sy-notifications-unread-symbolic"
-              : "sy-notifications-symbolic"
-          )}
-          pixelSize={20}
-        />
-        <label
-          label={notifications((n) =>
-            n.length > 99 ? "99+" : n.length.toString()
-          )}
-        />
-      </box>
-    </menubutton>
+    <BarItem spacing={Config.spacing.small}>
+      <image
+        iconName={notifications((n) =>
+          n.length
+            ? "sy-notifications-unread-symbolic"
+            : "sy-notifications-symbolic"
+        )}
+        pixelSize={Config.sizing.indicatorIcon}
+      />
+      <With value={notifications}>
+        {(notifications) =>
+          !!notifications.length && (
+            <label
+              label={
+                notifications.length > 99
+                  ? "99+"
+                  : notifications.length.toString()
+              }
+            />
+          )
+        }
+      </With>
+    </BarItem>
   )
 }

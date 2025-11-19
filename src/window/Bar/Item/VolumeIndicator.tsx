@@ -6,14 +6,19 @@ const wp = AstalWp.get_default()
 
 export default function VolumeIndicator() {
   const present = createBinding(wp, "defaultSpeaker").as((speaker) => !!speaker)
-  const icon = createComputed([
-    createBinding(wp.defaultSpeaker, "volume"),
-    createBinding(wp.defaultSpeaker, "mute"),
-  ]).as(([volume, mute]) => {
+  const volume = createBinding(wp.defaultSpeaker, "volume")
+  const mute = createBinding(wp.defaultSpeaker, "mute")
+
+  const icon = createComputed([volume, mute], (volume, mute) => {
     if (mute) return "sy-volume-mute-symbolic"
     if (volume > 0.5) return "sy-volume-up-symbolic"
     if (volume > 0) return "sy-volume-down-symbolic"
     return "sy-volume-low-symbolic"
+  })
+
+  const tooltip = createComputed([volume, mute], (volume, mute) => {
+    if (mute) return "muted"
+    return `${(volume * 100).toFixed(0)}%`
   })
 
   return (
@@ -21,6 +26,7 @@ export default function VolumeIndicator() {
       visible={present}
       iconName={icon}
       pixelSize={Config.sizing.indicatorIcon}
+      tooltipText={tooltip}
     />
   )
 }

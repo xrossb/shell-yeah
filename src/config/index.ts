@@ -1,12 +1,13 @@
 export const Config = {
   animation: {
     short: 300,
+    long: 3000,
   },
   windowName: {
     bar: "bar",
   },
   format: {
-    clock: "%a, %d %b · %I:%M %p",
+    clock: "%a, %d %b · %I:%M %P",
   },
   icon: {
     size: {
