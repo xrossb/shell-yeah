@@ -98,22 +98,10 @@ popover arrow {
 }
 
 #wallpaper {
-  // background-image: url("$SRC/assets/wallpaper.png");
-  // background-size: cover;
-  // .vignette {
-  // background: transparent;
-  // box-shadow: inset 0 0 300px $bg-color;
-  // }
-  // animation: fade-in 300ms;
   background: transparent;
+
+  .vignette {
+    background: transparent;
+    box-shadow: inset 0 0 300px $bg-color;
+  }
 }
-
-// @keyframes fade-in {
-//   from {
-//     opacity: 0;
-//   }
-
-//   to {
-//     opacity: 1;
-//   }
-// }
