@@ -5,23 +5,36 @@ import { Config } from "@/config"
 const bluetooth = AstalBluetooth.get_default()
 
 export default function BluetoothIndicator() {
-  const powered = createBinding(bluetooth, "isPowered")
-  const connected = createBinding(bluetooth, "isConnected")
-  const status = createComputed([powered, connected]).as(
-    ([powered, connected]) => {
-      if (!powered) return "off"
-      if (!connected) return "on"
+  const status = createComputed(
+    [
+      createBinding(bluetooth, "isPowered"),
+      createBinding(bluetooth, "isConnected"),
+    ],
+    (isPowered, isConnected) => {
+      if (!isPowered) return "off"
+      if (!isConnected) return "on"
       return "connected"
     }
   )
+
   const visible = createBinding(bluetooth, "adapter").as((adapter) => !!adapter)
+  const icon = status.as(bluetoothIcon)
+  const tooltip = createComputed(
+    [status, createBinding(bluetooth, "devices")],
+    (status, devices) => {
+      if (status !== "connected") return status
+
+      const connectedDevices = devices.filter((device) => device.connected)
+      return `${connectedDevices.length} connected`
+    }
+  )
 
   return (
     <image
       visible={visible}
-      iconName={status.as(bluetoothIcon)}
+      iconName={icon}
       pixelSize={Config.sizing.indicatorIcon}
-      tooltipText={status}
+      tooltipText={tooltip}
     />
   )
 }
