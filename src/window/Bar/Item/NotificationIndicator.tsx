@@ -19,17 +19,16 @@ export default function NotificationIndicator() {
         pixelSize={Config.sizing.indicatorIcon}
       />
       <With value={notifications}>
-        {(notifications) =>
-          !!notifications.length && (
-            <label
-              label={
-                notifications.length > 99
-                  ? "99+"
-                  : notifications.length.toString()
-              }
-            />
-          )
-        }
+        {(notifications) => (
+          <label
+            visible={!!notifications.length}
+            label={
+              notifications.length > 99
+                ? "99+"
+                : notifications.length.toString()
+            }
+          />
+        )}
       </With>
     </BarItem>
   )

@@ -1,5 +1,5 @@
 import AstalBattery from "gi://AstalBattery"
-import { Accessor, createBinding, createComputed, With } from "ags"
+import { Accessor, createBinding, createComputed } from "ags"
 import { Config } from "@/config"
 import BarItem from "../BarItem"
 
@@ -10,27 +10,22 @@ export default function BatteryIndicator() {
   const batteryInfo = batteryBinding(battery)
 
   return (
-    <With value={isPresent}>
-      {(isPresent) =>
-        isPresent && (
-          <BarItem
-            name="battery"
-            spacing={Config.spacing.small}
-            tooltipText={batteryInfo(batteryTooltip)}
-          >
-            <image
-              iconName={batteryInfo(batteryIcon)}
-              pixelSize={Config.sizing.indicatorIcon}
-            />
-            <label
-              label={batteryInfo(
-                (battery) => `${Math.floor(battery.percentage * 100)}%`
-              )}
-            />
-          </BarItem>
-        )
-      }
-    </With>
+    <BarItem
+      visible={isPresent}
+      name="battery"
+      spacing={Config.spacing.small}
+      tooltipText={batteryInfo(batteryTooltip)}
+    >
+      <image
+        iconName={batteryInfo(batteryIcon)}
+        pixelSize={Config.sizing.indicatorIcon}
+      />
+      <label
+        label={batteryInfo(
+          (battery) => `${Math.floor(battery.percentage * 100)}%`
+        )}
+      />
+    </BarItem>
   )
 }
 
