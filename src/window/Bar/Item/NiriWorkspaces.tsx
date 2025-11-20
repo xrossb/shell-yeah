@@ -4,6 +4,7 @@ import { createBinding, For } from "ags"
 import { Config } from "@/config"
 import AstalApps from "gi://AstalApps"
 import { Process } from "ags/process"
+import Gio from "gi://Gio?version=2.0"
 
 const apps = new AstalApps.Apps()
 const niri = AstalNiri.get_default()
@@ -72,6 +73,8 @@ function WindowButton({ window }: { window: AstalNiri.Window }) {
     )
   })
 
+  const icon = Gio.Icon.new_for_string(app?.iconName || "")
+
   return (
     <box>
       <Gtk.GestureClick
@@ -88,7 +91,7 @@ function WindowButton({ window }: { window: AstalNiri.Window }) {
         tooltipText={window.title}
         halign={Gtk.Align.CENTER}
         valign={Gtk.Align.CENTER}
-        iconName={app?.iconName}
+        gicon={icon}
         pixelSize={Config.sizing.trayIcon}
       />
     </box>
