@@ -20,7 +20,7 @@ export default function NetworkIndicator() {
       return { icon: "sy-wifi-symbolic", opacity: 1 }
     }
 
-    if (get(primary) === AstalNetwork.Primary.WIFI) {
+    if (get(primary) === AstalNetwork.Primary.WIRED) {
       return { icon: "sy-wired-symbolic", opacity: 1 }
     }
 
@@ -63,6 +63,8 @@ export default function NetworkIndicator() {
     }
 
     if (wired) {
+      if (lines.length) lines.push("")
+
       const ifname = get(wired.device.interface)
       const state = get(wired.state)
       lines.push(`${ifname} (${deviceState(state)})`)
