@@ -3,10 +3,12 @@ import style from "./style.scss"
 import Bar from "./src/window/Bar"
 import Wallpaper from "@/window/Wallpaper"
 
+const datadir = import.meta.PKG_DATADIR || SRC + "/assets"
+
 app.start({
   gtkTheme: "Adwaita",
   css: style,
-  icons: `${SRC}/assets/icons`,
+  icons: `${datadir}/icons`,
   main() {
     for (const window of [Bar, Wallpaper]) {
       app.monitors.map(window)
