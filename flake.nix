@@ -87,7 +87,7 @@
 
           mkdir -p $out/bin
           mkdir -p $out/share
-          cp -r * $out/share
+          cp -r assets/* $out/share
           ags bundle ${entry} $out/bin/${pname} -d "SRC='$out/share'"
 
           runHook postInstall
