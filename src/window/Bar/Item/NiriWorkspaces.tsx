@@ -71,7 +71,6 @@ function WindowButton({ window }: { window: AstalNiri.Window }) {
       app.wmClass?.toLowerCase() === id
     )
   })
-  console.log(app?.name)
 
   return (
     <box>
