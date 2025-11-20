@@ -44,6 +44,7 @@
 
     astalPackages = with ags.packages.${system}; [
       io
+      apps
       astal4
       notifd
       tray

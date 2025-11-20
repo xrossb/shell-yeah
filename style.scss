@@ -31,6 +31,10 @@ $fg-color: $base05;
   text-shadow: 0 0 4px $bg-color;
   -gtk-icon-shadow: 0 0 4px $bg-color;
 
+  .left {
+    margin-left: 8px;
+  }
+
   .right {
     margin-right: 8px;
   }
@@ -61,19 +65,19 @@ $fg-color: $base05;
   }
 }
 
-#workspaces button {
-  background: transparent;
-  border-radius: 0;
+#workspaces .workspace {
+  padding: 0 7px;
+  margin: 0 -7px;
+  border-radius: 15px;
 
-  min-width: 27px;
+  min-width: 16px;
 
   &.active {
-    background: rgba($base0C, 50%);
-    box-shadow: inset 0 -3px $base0C;
+    background: rgba($base04, 50%);
   }
 
   &:hover {
-    box-shadow: inset 0 -3px $base0C;
+    background: rgba($base0C, 50%);
   }
 }
 

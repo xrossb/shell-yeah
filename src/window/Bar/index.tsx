@@ -47,7 +47,7 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
 
 function BarStart({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
   return (
-    <box class="start" $type="start" spacing={Config.spacing.mid}>
+    <box class="left" $type="start" spacing={Config.spacing.mid}>
       <NiriWorkspaces gdkmonitor={gdkmonitor} />
     </box>
   )
