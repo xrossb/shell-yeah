@@ -62,7 +62,7 @@
       ];
   in {
     packages.${system} = {
-      default = pkgs.stdenv.mkDerivation {
+      default = pkgs.stdenv.mkDerivation rec {
         name = pname;
         src = ./.;
 
@@ -72,6 +72,12 @@
           pkgs.pnpm.configHook
           ags.packages.${system}.default
         ];
+
+        pnpmDeps = pkgs.pnpm.fetchDeps {
+          inherit pname src;
+          fetcherVersion = 2;
+          hash = "sha256-86YJtfgLT003beUrwnVOZyBj7L71RXJWTQ2CQTTh+Bg=";
+        };
 
         buildInputs = extraPackages ++ [pkgs.gjs];
 
