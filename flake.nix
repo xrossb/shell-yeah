@@ -4,30 +4,25 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
 
-    ags = {
-      url = "github:aylur/ags";
+    astal = {
+      url = "github:aylur/astal";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    libastal-niri = {
+    astal-niri = {
       url = "github:sameoldlab/astal?ref=feat/niri";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    ags = {
+      url = "github:aylur/ags";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.astal.follows = "astal";
+    };
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    ags,
-    libastal-niri,
-  }: let
-    system = "x86_64-linux";
-    pkgs = nixpkgs.legacyPackages.${system};
-    pname = "shell-yeah";
-    entry = "app.ts";
-
+  outputs = {nixpkgs, ...} @ inputs: let
     # Override nativeBuildInputs to replace wrapGAppsHook with wrapGAppsHook3.
-    astalniri =
-      libastal-niri.packages.${system}.niri.overrideAttrs
+    astal-niri = pkgs:
+      inputs.astal-niri.packages.${pkgs.system}.niri.overrideAttrs
       (finalAttrs: prevAttrs: {
         nativeBuildInputs = with pkgs; [
           wrapGAppsHook4
@@ -42,67 +37,89 @@
         ];
       });
 
-    astalPackages = with ags.packages.${system}; [
-      io
-      apps
-      astal4
-      notifd
-      tray
-      wireplumber
-      battery
-      bluetooth
-      network
-    ];
+    eachSystem = fn:
+      nixpkgs.lib.genAttrs nixpkgs.lib.platforms.linux (
+        system:
+          fn rec {
+            pkgs = nixpkgs.legacyPackages.${system};
+            astal = inputs.astal.packages.${system} // {niri = astal-niri pkgs;};
+            ags = inputs.ags.packages.${system};
+          }
+      );
 
-    extraPackages =
-      astalPackages
-      ++ [
-        astalniri
-        pkgs.libadwaita
-        pkgs.libsoup_3
-      ];
+    packages = {
+      pkgs,
+      astal,
+    }: [
+      pkgs.glib
+      pkgs.gjs
+      astal.astal4
+      astal.apps
+      astal.io
+      astal.notifd
+      astal.tray
+      astal.wireplumber
+      astal.battery
+      astal.bluetooth
+      astal.network
+      astal.niri
+    ];
   in {
-    packages.${system} = {
-      default = pkgs.stdenv.mkDerivation rec {
-        name = pname;
+    formatter = eachSystem ({pkgs, ...}: pkgs.alejandra);
+
+    packages = eachSystem ({
+      pkgs,
+      astal,
+      ags,
+      ...
+    }: rec {
+      default = shell-yeah;
+
+      shell-yeah = pkgs.stdenv.mkDerivation rec {
+        name = "shell-yeah";
         src = ./.;
 
-        nativeBuildInputs = with pkgs; [
-          wrapGAppsHook4
-          gobject-introspection
-          pkgs.pnpm.configHook
-          ags.packages.${system}.default
-        ];
-
         pnpmDeps = pkgs.pnpm.fetchDeps {
-          inherit pname src;
+          inherit src;
+          pname = name;
           fetcherVersion = 2;
           hash = "sha256-86YJtfgLT003beUrwnVOZyBj7L71RXJWTQ2CQTTh+Bg=";
         };
 
-        buildInputs = extraPackages ++ [pkgs.gjs];
+        nativeBuildInputs = [
+          pkgs.wrapGAppsHook4
+          pkgs.gobject-introspection
+          pkgs.pnpm.configHook
+          ags.default
+        ];
+
+        buildInputs = packages {inherit pkgs astal;};
 
         installPhase = ''
-          runHook preInstall
-
           mkdir -p $out/bin
           mkdir -p $out/share
           cp -r assets/* $out/share
-          ags bundle ${entry} $out/bin/${pname} -d "import.meta.PKG_DATADIR='$out/share'"
-
-          runHook postInstall
+          ags bundle app.ts $out/bin/shell-yeah -d "import.meta.PKG_DATADIR='$out/share'"
         '';
       };
-    };
+    });
 
-    devShell.${system} = pkgs.mkShell {
-      buildInputs = [
-        (ags.packages.${system}.default.override {
-          inherit extraPackages;
-        })
-        pkgs.entr
-        pkgs.pnpm
-      ];
-    };
+    devShells = eachSystem ({
+      pkgs,
+      astal,
+      ags,
+      ...
+    }: {
+      default = pkgs.mkShell {
+        buildInputs = [
+          (ags.default.override {
+            extraPackages = packages {inherit pkgs astal;};
+          })
+
+          pkgs.entr
+          pkgs.pnpm
+        ];
+      };
+    });
   };
 }

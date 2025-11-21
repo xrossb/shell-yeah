@@ -6,7 +6,6 @@ import Wallpaper from "@/window/Wallpaper"
 export const datadir = import.meta.PKG_DATADIR || SRC + "/assets"
 
 app.start({
-  gtkTheme: "Adwaita",
   css: style,
   icons: `${datadir}/icons`,
   main() {
