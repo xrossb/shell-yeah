@@ -73,7 +73,7 @@ function WindowButton({ window }: { window: AstalNiri.Window }) {
     )
   })
 
-  const icon = Gio.Icon.new_for_string(app?.iconName || "")
+  const icon = Gio.Icon.new_for_string(app?.iconName || "sy-window-symbolic")
 
   return (
     <box>
