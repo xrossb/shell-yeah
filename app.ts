@@ -3,7 +3,7 @@ import style from "./style.scss"
 import Bar from "./src/window/Bar"
 import Wallpaper from "@/window/Wallpaper"
 
-const datadir = import.meta.PKG_DATADIR || SRC + "/assets"
+export const datadir = import.meta.PKG_DATADIR || SRC + "/assets"
 
 app.start({
   gtkTheme: "Adwaita",
