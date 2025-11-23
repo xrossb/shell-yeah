@@ -107,3 +107,29 @@ popover arrow {
     box-shadow: inset 0 0 300px $bg-color;
   }
 }
+
+#notifications {
+  background: transparent;
+
+  .container {
+    padding: 4px;
+  }
+}
+
+.notification {
+  padding: 8px;
+  background: $base02;
+  box-shadow: 0 0 4px $base00;
+  border-radius: 8px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: $base03;
+
+  .header {
+    font-weight: bold;
+  }
+
+  &.urgent {
+    border-color: $base09;
+  }
+}

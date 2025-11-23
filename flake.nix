@@ -53,6 +53,7 @@
     }: [
       pkgs.glib
       pkgs.gjs
+      pkgs.libadwaita
       astal.astal4
       astal.apps
       astal.io

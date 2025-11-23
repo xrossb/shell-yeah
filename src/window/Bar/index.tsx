@@ -14,21 +14,17 @@ import BarItem from "./BarItem"
 export default function Bar(gdkmonitor: Gdk.Monitor) {
   const { TOP, LEFT, RIGHT } = Astal.WindowAnchor
 
-  const [visible, setVisible] = createState(false)
   const [revealed, setRevealed] = createState(false)
 
   return (
     <window
-      visible={visible}
+      visible
       name={Config.windowName.bar}
       gdkmonitor={gdkmonitor}
       exclusivity={Astal.Exclusivity.EXCLUSIVE}
       layer={Astal.Layer.TOP}
       anchor={TOP | LEFT | RIGHT}
-      $={() => {
-        setVisible(true)
-        setRevealed(true)
-      }}
+      $={() => setRevealed(true)}
     >
       <revealer
         transitionType={Gtk.RevealerTransitionType.SLIDE_DOWN}
