@@ -1,10 +1,13 @@
 import { Astal, Gdk, Gtk } from "ags/gtk4"
-import { createRoot, createState } from "ags"
+import { createState } from "ags"
 import Adw from "gi://Adw"
-import Graphene from "gi://Graphene"
+import app from "ags/gtk4/app"
+
+const handles: Gtk.Window[] = []
 
 export default function Popup(props: {
   children: JSX.Element
+  name: string
   gdkmonitor: Gdk.Monitor
   width?: number
   height?: number
@@ -13,15 +16,15 @@ export default function Popup(props: {
   anchor?: Astal.WindowAnchor
   transitionType?: Gtk.RevealerTransitionType
   transitionDuration?: number
+  $?: (self: Astal.Window) => void
 }) {
-  const { TOP, BOTTOM, RIGHT, LEFT } = Astal.WindowAnchor
-
   const [visible, setVisible] = createState(false)
   const [revealed, setRevealed] = createState(false)
 
   let content: Gtk.Widget
 
   function show() {
+    handles.forEach((h) => h.hide())
     setVisible(true)
     setRevealed(true)
   }
@@ -32,14 +35,21 @@ export default function Popup(props: {
 
   return (
     <window
+      application={app}
       css="background: transparent;"
       visible={visible}
+      name={props.name}
+      namespace={props.name}
       keymode={Astal.Keymode.ON_DEMAND}
       layer={Astal.Layer.OVERLAY}
       gdkmonitor={props.gdkmonitor}
       anchor={props.anchor}
       onNotifyVisible={(self) => self.visible && content.grab_focus()}
-      $={(self) => Object.assign(self, { show, hide })}
+      $={(self) => {
+        Object.assign(self, { show, hide })
+        handles.push(self)
+        if (props.$) props.$(self)
+      }}
     >
       <Gtk.EventControllerKey
         onKeyPressed={(self, keyval: number) => {

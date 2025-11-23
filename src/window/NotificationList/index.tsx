@@ -1,11 +1,10 @@
 import { Astal, Gdk, Gtk } from "ags/gtk4"
 import AstalNotifd from "gi://AstalNotifd"
-import { createBinding, createComputed, createState, For, jsx } from "ags"
+import { createBinding, createState, For } from "ags"
 import Pango from "gi://Pango"
 import AstalApps from "gi://AstalApps"
 import Gio from "gi://Gio"
 import Adw from "gi://Adw"
-import GObject from "ags/gobject"
 import GLib from "gi://GLib"
 import { Config } from "@/config"
 import Popup from "@/component/Popup"
@@ -15,26 +14,27 @@ const apps = new AstalApps.Apps()
 export default function NotificationList(monitor: Gdk.Monitor) {
   const { TOP, RIGHT } = Astal.WindowAnchor
 
-  const fake = Array.from({ length: 99 }, () => ({
-    summary: "uh oh",
-    body: "hi hi hi",
-    urgency: AstalNotifd.Urgency.CRITICAL,
-  }))
+  let popup: Gtk.Window
 
   const notifd = AstalNotifd.get_default()
   const notifications = createBinding(notifd, "notifications").as((n) =>
-    n.toReversed()
+    n.toReversed(),
   )
+  notifications.subscribe(() => {
+    if (!notifications.get().length) popup.hide()
+  })
 
   const maxHeight = monitor.geometry.height - Config.sizing.bar
 
-  const popup = (
+  return (
     <Popup
+      name="notifications"
       gdkmonitor={monitor}
       width={320}
       anchor={TOP | RIGHT}
       transitionType={Gtk.RevealerTransitionType.SLIDE_LEFT}
       transitionDuration={Config.animation.short}
+      $={(self) => (popup = self)}
     >
       <scrolledwindow
         maxContentHeight={maxHeight}
@@ -52,8 +52,6 @@ export default function NotificationList(monitor: Gdk.Monitor) {
       </scrolledwindow>
     </Popup>
   )
-  popup.show()
-  return popup
 }
 
 function Notification(n: AstalNotifd.Notification) {
@@ -96,13 +94,13 @@ function Notification(n: AstalNotifd.Notification) {
         $type="overlay"
         visible={closeVisible}
         pixelSize={Config.icon.size.indicator}
-        iconName="sy-check-symbolic"
+        iconName="sy-close-symbolic"
         halign={Gtk.Align.END}
         valign={Gtk.Align.START}
       >
         <Gtk.GestureClick
           button={Gdk.BUTTON_PRIMARY}
-          onPressed={() => n.dismiss()}
+          onReleased={() => n.dismiss()}
         />
       </image>
     </overlay>
