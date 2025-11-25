@@ -118,6 +118,7 @@
           })
 
           pkgs.entr
+          pkgs.libnotify
           pkgs.pnpm
         ];
       };
