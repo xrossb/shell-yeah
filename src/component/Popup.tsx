@@ -1,11 +1,10 @@
 import { Astal, Gdk, Gtk } from "ags/gtk4"
 import { createState } from "ags"
-import Adw from "gi://Adw"
 import app from "ags/gtk4/app"
 
 const handles: Gtk.Window[] = []
 
-export default function Popup(props: {
+export type PopupProps = {
   children: JSX.Element
   name: string
   gdkmonitor: Gdk.Monitor
@@ -17,7 +16,9 @@ export default function Popup(props: {
   transitionType?: Gtk.RevealerTransitionType
   transitionDuration?: number
   $?: (self: Astal.Window) => void
-}) {
+}
+
+export default function Popup(props: PopupProps) {
   const [visible, setVisible] = createState(false)
   const [revealed, setRevealed] = createState(false)
 
@@ -36,7 +37,6 @@ export default function Popup(props: {
   return (
     <window
       application={app}
-      css="background: transparent;"
       visible={visible}
       name={props.name}
       namespace={props.name}
@@ -44,35 +44,32 @@ export default function Popup(props: {
       layer={Astal.Layer.OVERLAY}
       gdkmonitor={props.gdkmonitor}
       anchor={props.anchor}
-      onNotifyVisible={(self) => self.visible && content.grab_focus()}
+      onNotifyVisible={(self) => {
+        if (self.visible) self.grab_focus()
+      }}
       $={(self) => {
         Object.assign(self, { show, hide })
         handles.push(self)
         if (props.$) props.$(self)
       }}
+      resizable={false}
+      onNotifyIsActive={(self) => setRevealed(self.isActive)}
     >
       <Gtk.EventControllerKey
         onKeyPressed={(self, keyval: number) => {
-          if (keyval === Gdk.KEY_Escape) {
-            self.widget.hide()
-          }
+          if (keyval === Gdk.KEY_Escape) self.widget.hide()
         }}
       />
       <revealer
         revealChild={revealed}
         transitionType={props.transitionType}
         transitionDuration={props.transitionDuration}
-        onNotifyChildRevealed={(self) => setVisible(self.childRevealed)}
+        onNotifyChildRevealed={(self) => {
+          setVisible(self.childRevealed)
+        }}
+        $={(self) => (content = self)}
       >
-        <Adw.Clamp
-          orientation={Gtk.Orientation.HORIZONTAL}
-          widthRequest={props.width}
-          $={(self) => (content = self)}
-          focusable
-          onNotifyHasFocus={(self) => setRevealed(self.hasFocus)}
-        >
-          {props.children}
-        </Adw.Clamp>
+        {props.children}
       </revealer>
     </window>
   ) as Astal.Window

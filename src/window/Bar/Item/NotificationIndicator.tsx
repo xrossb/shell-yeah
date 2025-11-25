@@ -13,24 +13,21 @@ export default function NotificationIndicator() {
   const visible = count.as((c) => !!c)
   const label = count.as((c) => (c > 99 ? "99+" : c.toString()))
   const icon = count.as((c) =>
-    c ? "sy-notifications-unread-symbolic" : "sy-notifications-symbolic",
+    c ? "sy-notifications-unread-symbolic" : "sy-notifications-symbolic"
   )
 
   return (
     <BarItem spacing={Config.spacing.small}>
       <Gtk.GestureClick
         button={Gdk.BUTTON_PRIMARY}
-        onReleased={() => {
+        onPressed={() => {
           const window = app.get_window("notifications")
           if (!window) {
-            console.log("no window")
             return
           }
           if (window.visible) {
-            console.log("hiding")
             window.hide()
           } else {
-            console.log("showing")
             window.show()
           }
         }}

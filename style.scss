@@ -109,7 +109,7 @@ popover arrow {
 }
 
 #notifications {
-  background: transparent;
+  background: radial-gradient(farthest-side at top right, $base00, transparent);
 
   .container {
     padding: 4px;

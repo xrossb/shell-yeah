@@ -1,6 +1,6 @@
 import { Astal, Gdk, Gtk } from "ags/gtk4"
 import AstalNotifd from "gi://AstalNotifd"
-import { createBinding, createState, For } from "ags"
+import { createBinding, createState, For, With } from "ags"
 import Pango from "gi://Pango"
 import AstalApps from "gi://AstalApps"
 import Gio from "gi://Gio"
@@ -15,14 +15,12 @@ export default function NotificationList(monitor: Gdk.Monitor) {
   const { TOP, RIGHT } = Astal.WindowAnchor
 
   let popup: Gtk.Window
+  let scroller: Gtk.ScrolledWindow
 
   const notifd = AstalNotifd.get_default()
   const notifications = createBinding(notifd, "notifications").as((n) =>
-    n.toReversed(),
+    n.sort((a, b) => b.time - a.time)
   )
-  notifications.subscribe(() => {
-    if (!notifications.get().length) popup.hide()
-  })
 
   const maxHeight = monitor.geometry.height - Config.sizing.bar
 
@@ -30,7 +28,6 @@ export default function NotificationList(monitor: Gdk.Monitor) {
     <Popup
       name="notifications"
       gdkmonitor={monitor}
-      width={320}
       anchor={TOP | RIGHT}
       transitionType={Gtk.RevealerTransitionType.SLIDE_LEFT}
       transitionDuration={Config.animation.short}
@@ -40,6 +37,8 @@ export default function NotificationList(monitor: Gdk.Monitor) {
         maxContentHeight={maxHeight}
         propagateNaturalHeight
         hscrollbarPolicy={Gtk.PolicyType.NEVER}
+        widthRequest={320}
+        $={(self) => (scroller = self)}
       >
         <box
           orientation={Gtk.Orientation.VERTICAL}
@@ -47,7 +46,32 @@ export default function NotificationList(monitor: Gdk.Monitor) {
           class="container"
           css="padding: 8px;"
         >
-          <For each={notifications}>{Notification}</For>
+          <box halign={Gtk.Align.END} spacing={4}>
+            <image
+              iconName="sy-clear-all-symbolic"
+              pixelSize={Config.sizing.indicatorIcon}
+              tooltipText="snooze"
+            />
+            <image
+              iconName="sy-clear-all-symbolic"
+              pixelSize={Config.sizing.indicatorIcon}
+              tooltipText="clear all"
+            />
+          </box>
+
+          <With value={notifications}>
+            {(notifications) => {
+              if (notifications.length) {
+                return (
+                  <box orientation={Gtk.Orientation.VERTICAL} spacing={4}>
+                    {notifications.map(Notification)}
+                  </box>
+                )
+              }
+
+              return <label label="all caught up!" />
+            }}
+          </With>
         </box>
       </scrolledwindow>
     </Popup>
