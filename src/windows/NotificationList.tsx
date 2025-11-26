@@ -7,7 +7,7 @@ import Gio from "gi://Gio"
 import Adw from "gi://Adw"
 import GLib from "gi://GLib"
 import { Config } from "@/config"
-import Popup from "@/component/Popup"
+import Popup from "@/components/Popup"
 
 const apps = new AstalApps.Apps()
 
