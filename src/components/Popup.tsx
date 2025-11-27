@@ -7,11 +7,7 @@ const handles: Gtk.Window[] = []
 export type PopupProps = {
   children: JSX.Element
   name: string
-  gdkmonitor: Gdk.Monitor
-  width?: number
-  height?: number
-  halign?: Gtk.Align
-  valign?: Gtk.Align
+  gdkmonitor?: Gdk.Monitor
   anchor?: Astal.WindowAnchor
   transitionType?: Gtk.RevealerTransitionType
   transitionDuration?: number

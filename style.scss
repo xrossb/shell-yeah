@@ -133,3 +133,13 @@ popover arrow {
     border-color: $base09;
   }
 }
+
+.icon-button {
+  padding: 4px;
+  margin: -4px;
+  border-radius: 50%;
+
+  &:hover {
+    background: rgba($base0C, 50%);
+  }
+}

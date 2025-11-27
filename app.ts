@@ -10,7 +10,9 @@ app.start({
   css: style,
   icons: `${datadir}/icons`,
   main() {
-    for (const window of [Wallpaper, Bar, NotificationList]) {
+    NotificationList()
+
+    for (const window of [Wallpaper, Bar]) {
       app.monitors.map(window)
     }
   },

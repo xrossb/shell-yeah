@@ -11,34 +11,25 @@ import Popup from "@/components/Popup"
 
 const apps = new AstalApps.Apps()
 
-export default function NotificationList(monitor: Gdk.Monitor) {
+export default function NotificationList() {
   const { TOP, RIGHT } = Astal.WindowAnchor
-
-  let popup: Gtk.Window
-  let scroller: Gtk.ScrolledWindow
 
   const notifd = AstalNotifd.get_default()
   const notifications = createBinding(notifd, "notifications").as((n) =>
     n.sort((a, b) => b.time - a.time)
   )
 
-  const maxHeight = monitor.geometry.height - Config.sizing.bar
-
   return (
     <Popup
       name="notifications"
-      gdkmonitor={monitor}
       anchor={TOP | RIGHT}
       transitionType={Gtk.RevealerTransitionType.SLIDE_LEFT}
       transitionDuration={Config.animation.short}
-      $={(self) => (popup = self)}
     >
       <scrolledwindow
-        maxContentHeight={maxHeight}
         propagateNaturalHeight
         hscrollbarPolicy={Gtk.PolicyType.NEVER}
         widthRequest={320}
-        $={(self) => (scroller = self)}
       >
         <box
           orientation={Gtk.Orientation.VERTICAL}
@@ -46,19 +37,6 @@ export default function NotificationList(monitor: Gdk.Monitor) {
           class="container"
           css="padding: 8px;"
         >
-          <box halign={Gtk.Align.END} spacing={4}>
-            <image
-              iconName="sy-clear-all-symbolic"
-              pixelSize={Config.sizing.indicatorIcon}
-              tooltipText="snooze"
-            />
-            <image
-              iconName="sy-clear-all-symbolic"
-              pixelSize={Config.sizing.indicatorIcon}
-              tooltipText="clear all"
-            />
-          </box>
-
           <With value={notifications}>
             {(notifications) => {
               if (notifications.length) {
@@ -121,6 +99,7 @@ function Notification(n: AstalNotifd.Notification) {
         iconName="sy-close-symbolic"
         halign={Gtk.Align.END}
         valign={Gtk.Align.START}
+        class="icon-button"
       >
         <Gtk.GestureClick
           button={Gdk.BUTTON_PRIMARY}
