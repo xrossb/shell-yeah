@@ -117,9 +117,9 @@
             extraPackages = packages {inherit pkgs astal;};
           })
 
-          pkgs.entr
           pkgs.libnotify
           pkgs.pnpm
+          pkgs.reflex
         ];
       };
     });
