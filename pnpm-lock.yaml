@@ -10,7 +10,7 @@ importers:
     dependencies:
       ags:
         specifier: github:Aylur/ags
-        version: https://codeload.github.com/Aylur/ags/tar.gz/0cbca42b11d23aad8c0689fc7385e517bde94c61(gnim@https://codeload.github.com/Aylur/gnim/tar.gz/33ed84f2f653256467b99da44a6292ac5e423649)
+        version: https://codeload.github.com/Aylur/ags/tar.gz/7d6493656c160bedde29716e3eb391180ad538b1(gnim@https://codeload.github.com/Aylur/gnim/tar.gz/33ed84f2f653256467b99da44a6292ac5e423649)
       gnim:
         specifier: github:Aylur/gnim
         version: https://codeload.github.com/Aylur/gnim/tar.gz/33ed84f2f653256467b99da44a6292ac5e423649
@@ -20,8 +20,8 @@ importers:
 
 packages:
 
-  ags@https://codeload.github.com/Aylur/ags/tar.gz/0cbca42b11d23aad8c0689fc7385e517bde94c61:
-    resolution: {tarball: https://codeload.github.com/Aylur/ags/tar.gz/0cbca42b11d23aad8c0689fc7385e517bde94c61}
+  ags@https://codeload.github.com/Aylur/ags/tar.gz/7d6493656c160bedde29716e3eb391180ad538b1:
+    resolution: {tarball: https://codeload.github.com/Aylur/ags/tar.gz/7d6493656c160bedde29716e3eb391180ad538b1}
     version: 3.0.0
     engines: {gjs: '>=1.79.0'}
     os: [linux]
@@ -47,7 +47,7 @@ packages:
 
 snapshots:
 
-  ags@https://codeload.github.com/Aylur/ags/tar.gz/0cbca42b11d23aad8c0689fc7385e517bde94c61(gnim@https://codeload.github.com/Aylur/gnim/tar.gz/33ed84f2f653256467b99da44a6292ac5e423649):
+  ags@https://codeload.github.com/Aylur/ags/tar.gz/7d6493656c160bedde29716e3eb391180ad538b1(gnim@https://codeload.github.com/Aylur/gnim/tar.gz/33ed84f2f653256467b99da44a6292ac5e423649):
     dependencies:
       gnim: https://codeload.github.com/Aylur/gnim/tar.gz/33ed84f2f653256467b99da44a6292ac5e423649
 

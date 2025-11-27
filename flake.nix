@@ -84,7 +84,7 @@
           inherit src;
           pname = name;
           fetcherVersion = 2;
-          hash = "sha256-86YJtfgLT003beUrwnVOZyBj7L71RXJWTQ2CQTTh+Bg=";
+          hash = "sha256-B5cJH0hXvW0wznvITtftFe3cae6rNxVLKxFOVtaRJzM=";
         };
 
         nativeBuildInputs = [
