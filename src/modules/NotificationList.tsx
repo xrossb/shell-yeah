@@ -70,27 +70,46 @@ function Notification(n: AstalNotifd.Notification) {
         onEnter={() => setCloseVisible(true)}
         onLeave={() => setCloseVisible(false)}
       />
-      <box spacing={8}>
-        {NotificationIcon(n)}
-        <box orientation={Gtk.Orientation.VERTICAL} heightRequest={30}>
-          {n.appName && (
-            <label
-              class="header"
-              halign={Gtk.Align.START}
-              label={n.appName}
-              ellipsize={Pango.EllipsizeMode.END}
-            />
-          )}
-          {n.summary && (
-            <label
-              class="header"
-              halign={Gtk.Align.START}
-              label={n.summary}
-              ellipsize={Pango.EllipsizeMode.END}
-            />
-          )}
-          <label xalign={0} label={n.body} wrap />
+      <box orientation={Gtk.Orientation.VERTICAL} spacing={8}>
+        {n.actions.length === 1 && (
+          <Gtk.GestureClick
+            button={Gdk.BUTTON_PRIMARY}
+            onReleased={() => n.actions[0].invoke()}
+          />
+        )}
+        <box spacing={8}>
+          {NotificationIcon(n)}
+          <box orientation={Gtk.Orientation.VERTICAL} heightRequest={30}>
+            {n.appName && (
+              <label
+                class="header"
+                halign={Gtk.Align.START}
+                label={n.appName}
+                ellipsize={Pango.EllipsizeMode.END}
+              />
+            )}
+            {n.summary && (
+              <label
+                class="header"
+                halign={Gtk.Align.START}
+                label={n.summary}
+                ellipsize={Pango.EllipsizeMode.END}
+              />
+            )}
+            <label xalign={0} label={n.body} wrap />
+          </box>
         </box>
+        {n.actions.length > 1 && (
+          <box spacing={8}>
+            {n.actions.map((action) => (
+              <button
+                label={action.label}
+                onClicked={() => action.invoke()}
+                hexpand
+              />
+            ))}
+          </box>
+        )}
       </box>
       <image
         $type="overlay"
