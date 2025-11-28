@@ -86,7 +86,7 @@ function batteryTooltip({
   timeToEmpty,
 }: BatteryInfo) {
   const items = [
-    `capacity: ${energy.toFixed(2)}W / ${energyFull.toFixed(2)}W`,
+    `capacity: ${energy.toFixed(2)}Wh / ${energyFull.toFixed(2)}Wh`,
     `flow: ${energyRate.toFixed(2)}W`,
   ]
 
