@@ -15,7 +15,7 @@ export default function NiriWorkspaces({
   gdkmonitor: Gdk.Monitor
 }) {
   const outputs = createBinding(niri, "outputs").as((outputs) =>
-    outputs.filter((output) => output.model === gdkmonitor.model)
+    outputs.filter((output) => output.model === gdkmonitor.model),
   )
 
   return (
@@ -51,12 +51,12 @@ function WorkspaceButton({ workspace }: { workspace: AstalNiri.Workspace }) {
   const windows = createBinding(workspace, "windows")
 
   return (
-    <box cssClasses={classes} spacing={8} hexpand={false}>
+    <box cssClasses={classes} spacing={8}>
       <Gtk.GestureClick
         button={Gdk.BUTTON_PRIMARY}
         onPressed={() => workspace.focus()}
       />
-      <label label={workspace.idx.toString()} hexpand />
+      <label label={workspace.idx.toString()} />
       <For each={windows}>{(window) => <WindowButton window={window} />}</For>
     </box>
   )
