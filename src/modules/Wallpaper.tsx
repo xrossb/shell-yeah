@@ -3,7 +3,7 @@ import { Astal, Gdk, Gtk } from "ags/gtk4"
 import Gio from "gi://Gio"
 import { datadir } from "../../app"
 
-export default function Wallpaper(monitor: Gdk.Monitor) {
+export default function Wallpaper(props: { monitor: Gdk.Monitor }) {
   const { TOP, BOTTOM, LEFT, RIGHT } = Astal.WindowAnchor
 
   let revealer: Gtk.Revealer
@@ -15,7 +15,7 @@ export default function Wallpaper(monitor: Gdk.Monitor) {
       visible
       name="wallpaper"
       namespace="wallpaper"
-      gdkmonitor={monitor}
+      gdkmonitor={props.monitor}
       layer={Astal.Layer.BACKGROUND}
       exclusivity={Astal.Exclusivity.IGNORE}
       anchor={TOP | BOTTOM | LEFT | RIGHT}

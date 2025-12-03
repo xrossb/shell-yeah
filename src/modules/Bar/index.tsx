@@ -11,7 +11,7 @@ import VolumeIndicator from "./Item/VolumeIndicator"
 import BluetoothIndicator from "./Item/BluetoothIndicator"
 import BarItem from "./BarItem"
 
-export default function Bar(gdkmonitor: Gdk.Monitor) {
+export default function Bar(props: { monitor: Gdk.Monitor }) {
   const { TOP, LEFT, RIGHT } = Astal.WindowAnchor
 
   const [revealed, setRevealed] = createState(false)
@@ -20,7 +20,7 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
     <window
       visible
       name={Config.windowName.bar}
-      gdkmonitor={gdkmonitor}
+      gdkmonitor={props.monitor}
       exclusivity={Astal.Exclusivity.EXCLUSIVE}
       layer={Astal.Layer.TOP}
       anchor={TOP | LEFT | RIGHT}
@@ -32,7 +32,7 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
         revealChild={revealed}
       >
         <centerbox heightRequest={Config.sizing.bar}>
-          <BarStart gdkmonitor={gdkmonitor} />
+          <BarStart gdkmonitor={props.monitor} />
           <BarCenter />
           <BarEnd />
         </centerbox>
