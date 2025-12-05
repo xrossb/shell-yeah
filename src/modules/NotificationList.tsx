@@ -1,17 +1,17 @@
 import { Astal, Gdk, Gtk } from "ags/gtk4"
 import AstalNotifd from "gi://AstalNotifd"
-import { createBinding, createState, For, With } from "ags"
+import { createBinding, createState, State, With } from "ags"
 import Pango from "gi://Pango"
 import AstalApps from "gi://AstalApps"
 import Gio from "gi://Gio"
 import Adw from "gi://Adw"
 import GLib from "gi://GLib"
 import { Config } from "@/config"
-import Popup from "@/components/Popup"
+import Modal from "@/components/Modal"
 
 const apps = new AstalApps.Apps()
 
-export default function NotificationList() {
+export default function NotificationList(props: { open: State<boolean> }) {
   const { TOP, RIGHT } = Astal.WindowAnchor
 
   const notifd = AstalNotifd.get_default()
@@ -20,12 +20,7 @@ export default function NotificationList() {
   )
 
   return (
-    <Popup
-      name="notifications"
-      anchor={TOP | RIGHT}
-      transitionType={Gtk.RevealerTransitionType.SLIDE_LEFT}
-      transitionDuration={Config.animation.short}
-    >
+    <Modal anchor={TOP | RIGHT} open={props.open} class="notification-modal">
       <scrolledwindow
         propagateNaturalHeight
         hscrollbarPolicy={Gtk.PolicyType.NEVER}
@@ -52,7 +47,7 @@ export default function NotificationList() {
           </With>
         </box>
       </scrolledwindow>
-    </Popup>
+    </Modal>
   )
 }
 

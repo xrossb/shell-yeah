@@ -1,9 +1,9 @@
 import AstalNotifd from "gi://AstalNotifd"
-import { createBinding } from "ags"
+import { createBinding, createState } from "ags"
 import { Config } from "@/config"
 import BarItem from "../BarItem"
 import { Gdk, Gtk } from "ags/gtk4"
-import app from "ags/gtk4/app"
+import NotificationList from "@/modules/NotificationList"
 
 const notifd = AstalNotifd.get_default()
 
@@ -16,20 +16,16 @@ export default function NotificationIndicator() {
     c ? "sy-notifications-unread-symbolic" : "sy-notifications-symbolic"
   )
 
+  const open = createState(false)
+  const [getOpen, setOpen] = open
+
   return (
     <BarItem spacing={Config.spacing.small}>
+      <NotificationList open={open} />
       <Gtk.GestureClick
         button={Gdk.BUTTON_PRIMARY}
         onPressed={() => {
-          const window = app.get_window("notifications")
-          if (!window) {
-            return
-          }
-          if (window.visible) {
-            window.hide()
-          } else {
-            window.show()
-          }
+          setOpen(!getOpen.get())
         }}
       />
       <image iconName={icon} pixelSize={Config.sizing.indicatorIcon} />

@@ -11,7 +11,6 @@ app.start({
   css: style,
   icons: `${datadir}/icons`,
   main() {
-    NotificationList()
     EachMonitor((monitor) => {
       Wallpaper({ monitor })
       Bar({ monitor })

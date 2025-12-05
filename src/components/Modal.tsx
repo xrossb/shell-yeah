@@ -1,20 +1,22 @@
-import { createState, Node, State, This } from "ags"
+import { Node, State, This } from "ags"
 import { Astal, Gdk, Gtk } from "ags/gtk4"
 import app from "ags/gtk4/app"
 
 export type ModalProps = {
+  open: State<boolean>
+
+  class?: string
   children?: Node
   monitor?: Gdk.Monitor
   anchor?: Astal.WindowAnchor
-
-  open?: State<boolean>
 }
 
 export default function Modal({
+  open: [open, setOpen],
+  class: cssClass,
   children,
   monitor,
   anchor,
-  open: [open, setOpen] = createState(false),
 }: ModalProps) {
   const { ON_DEMAND } = Astal.Keymode
   const { OVERLAY } = Astal.Layer
@@ -22,6 +24,7 @@ export default function Modal({
   return (
     <This this={app}>
       <window
+        class={cssClass}
         visible={open}
         keymode={ON_DEMAND}
         layer={OVERLAY}
@@ -30,6 +33,9 @@ export default function Modal({
         resizable={false}
         onNotifyVisible={(self) => {
           if (self.visible) self.grab_focus()
+        }}
+        onNotifyIsActive={(self) => {
+          if (!self.isActive) setOpen(false)
         }}
       >
         <Gtk.EventControllerKey
