@@ -1,5 +1,5 @@
 import AstalBluetooth from "gi://AstalBluetooth"
-import { createBinding, createComputed, With } from "ags"
+import { createBinding, createComputed } from "ags"
 import { Config } from "@/config"
 
 const bluetooth = AstalBluetooth.get_default()

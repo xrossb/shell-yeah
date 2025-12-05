@@ -1,5 +1,5 @@
 import AstalTray from "gi://AstalTray"
-import { createBinding, For, jsx, onMount } from "ags"
+import { createBinding, For } from "ags"
 import { Gdk, Gtk } from "ags/gtk4"
 import { Config } from "@/config"
 import BarItem from "../BarItem"
