@@ -1,8 +1,7 @@
 {
-  "dependencies": {
-    "ags": "github:Aylur/ags",
-    "gnim": "github:Aylur/gnim",
-    "gnofi": "github:Aylur/gnofi"
+  "devDependencies": {
+    "prettier": "^3.8.1",
+    "typescript": "^6.0.2"
   },
   "prettier": {
     "semi": false,

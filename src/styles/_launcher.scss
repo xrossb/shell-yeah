@@ -1,0 +1,40 @@
+@use "vars";
+
+#launcher {
+  font-size: 18px;
+  font-weight: normal;
+}
+
+#launcher * {
+  outline: none;
+}
+
+#launcher entry {
+  background-color: transparent;
+  border-style: none;
+  border-radius: 8px;
+}
+
+#launcher separator {
+  color: vars.$base04;
+}
+
+#launcher separator {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+#launcher list > * {
+  padding: 8px;
+  border-radius: 8px;
+}
+
+#launcher .title {
+  font-size: 18px;
+  margin-left: 8px;
+}
+
+#launcher .description {
+  font-size: 14px;
+  margin-left: 8px;
+}

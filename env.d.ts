@@ -1,4 +1,5 @@
 declare const SRC: string
+declare const DATADIR: string | undefined
 
 declare module "inline:*" {
   const content: string
@@ -18,8 +19,4 @@ declare module "*.blp" {
 declare module "*.css" {
   const content: string
   export default content
-}
-
-interface ImportMeta {
-  PKG_DATADIR?: string
 }

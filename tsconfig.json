@@ -1,6 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
+    "experimentalDecorators": false,
     "jsx": "react-jsx",
     "jsxImportSource": "ags/gtk4",
     "lib": [
@@ -10,7 +11,7 @@
     "moduleResolution": "Bundler",
     "paths": {
       "@/*": [
-        "./src/*"
+        "./*"
       ]
     },
     "strict": true,
