@@ -18,7 +18,7 @@ export class Plugin implements search.Plugin {
         results[i] = new search.Result(
           apps[i].iconName,
           apps[i].name,
-          apps[i].entry,
+          apps[i].description ?? apps[i].entry,
           (ctx) => {
             apps[i].launch()
             ctx.close()

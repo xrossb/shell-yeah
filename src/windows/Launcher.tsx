@@ -26,24 +26,6 @@ export default function Launcher() {
 
   const plugins = new search.Registry()
   plugins.register(new apps.Plugin())
-  // plugins.register({
-  //   search(query) {
-  //     if (!query) return []
-  //     const results = new Array<search.Result>(20)
-  //     results.fill(
-  //       new search.Result(
-  //         "sy-launcher",
-  //         "hello world",
-  //         "this is a test",
-  //         (ctx) => {
-  //           console.log("hiiiii")
-  //           ctx.close()
-  //         },
-  //       ),
-  //     )
-  //     return results
-  //   },
-  // })
 
   let popup: Astal.Window
   let entry: Gtk.Entry
