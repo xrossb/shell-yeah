@@ -76,30 +76,35 @@ function Notification(n: AstalNotifd.Notification) {
 
 function AppIcon(n: AstalNotifd.Notification) {
   const icon = n.appIcon || n.desktopEntry
+
+  if (isFile(icon)) {
+    return (
+      <Adw.Clamp maximumSize={32}>
+        <Gtk.Picture
+          contentFit={Gtk.ContentFit.CONTAIN}
+          file={Gio.file_new_for_path(n.image)}
+        />
+      </Adw.Clamp>
+    )
+  }
+
   return isIcon(icon) && <image iconName={icon} iconSize={Gtk.IconSize.LARGE} />
 }
 
 function Header(n: AstalNotifd.Notification) {
-  return <label label={n.appName} />
+  const parts = [n.time, n.appName, n.summary].filter((x) => x)
+  return <label ellipsize={Pango.EllipsizeMode.END} label={parts.join(" · ")} />
 }
 
 function TextContent(n: AstalNotifd.Notification) {
   return (
-    <box orientation={Gtk.Orientation.VERTICAL}>
-      <label
-        visible={!!n.summary && n.summary !== n.appName}
-        halign={Gtk.Align.START}
-        ellipsize={Pango.EllipsizeMode.END}
-        label={n.summary}
-      />
-      <label
-        visible={!!n.body}
-        halign={Gtk.Align.START}
-        wrap
-        wrapMode={Pango.WrapMode.WORD_CHAR}
-        label={n.body}
-      />
-    </box>
+    <label
+      visible={!!n.body}
+      halign={Gtk.Align.START}
+      wrap
+      wrapMode={Pango.WrapMode.WORD_CHAR}
+      label={n.body}
+    />
   )
 }
 
