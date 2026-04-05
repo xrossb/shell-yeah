@@ -1,5 +1,9 @@
 import GObject, { property, register } from "ags/gobject"
 
+/**
+ * Bundles search plugins together, allowing for searching across multiple
+ * plugins simultaneously.
+ */
 export class Registry {
   #plugins: Array<Plugin>
 
@@ -23,16 +27,28 @@ export class Registry {
   }
 }
 
+/**
+ * Interface for search plugins.
+ */
 export type Plugin = {
   search(query: string): Promise<Array<Result>>
 }
 
 export type Context = {
+  /**
+   * Closes the search prompt.
+   */
   close(): void
 }
 
+/**
+ * Runnable action tied to a search result.
+ */
 export type Action = (ctx: Context) => void
 
+/**
+ * Single result of a search.
+ */
 @register()
 export class Result extends GObject.Object {
   declare static $gtype: GObject.GType<Result>

@@ -1,28 +1,25 @@
-import app from "ags/gtk4/app"
 import EachMonitor from "@/src/lib/EachMonitor"
+import AudioMenu from "@/src/windows/AudioMenu"
 import Bar from "@/src/windows/Bar"
-import Wallpaper from "@/src/windows/Wallpaper"
-import OSD from "@/src/windows/OSD"
+import BatteryMenu from "@/src/windows/BatteryMenu"
+import BluetoothMenu from "@/src/windows/BluetoothMenu"
 import Dock from "@/src/windows/Dock"
+import Launcher from "@/src/windows/Launcher"
+import NetworkMenu from "@/src/windows/NetworkMenu"
 import Notifications from "@/src/windows/Notifications"
 import NotificationsMenu from "@/src/windows/NotificationsMenu"
-import Launcher from "@/src/windows/Launcher"
-import BatteryMenu from "@/src/windows/BatteryMenu"
-import AudioMenu from "@/src/windows/AudioMenu"
-import BluetoothMenu from "@/src/windows/BluetoothMenu"
-import NetworkMenu from "@/src/windows/NetworkMenu"
+import OSD from "@/src/windows/OSD"
 import PowerMenu from "@/src/windows/PowerMenu"
+import Wallpaper from "@/src/windows/Wallpaper"
+import app from "ags/gtk4/app"
+import * as windows from "./src/lib/windows"
 import css from "./style.scss"
-import { Gdk, Gtk } from "ags/gtk4"
-import { toggle } from "./src/lib/windows"
 
 export const datadir = typeof DATADIR === "string" ? DATADIR : SRC + "/assets"
 
-const iconTheme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default()!)
-iconTheme.add_search_path(`${datadir}/icons`)
-
 app.start({
   css,
+  icons: `${datadir}/icons`,
   main() {
     EachMonitor((monitor) => {
       Bar({ monitor })
@@ -47,7 +44,6 @@ app.start({
       return
     }
     const [command, ...args] = argv
-
     switch (command) {
       case "toggle":
         if (args.length != 1) {
@@ -55,8 +51,7 @@ app.start({
           return
         }
         const [name] = args
-
-        toggle(name)
+        windows.toggle(name)
         res(`toggled window '${name}'`)
         return
       default:

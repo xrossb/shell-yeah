@@ -1,7 +1,8 @@
-import { Gdk } from "ags/gtk4"
 import app from "ags/gtk4/app"
-import AstalNiri from "gi://AstalNiri?version=0.1"
 
+/**
+ * Toggle a shell window by name.
+ */
 export function toggle(name: string) {
   const window = app.get_window(name)
   if (!window) {

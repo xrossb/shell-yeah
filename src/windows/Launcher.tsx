@@ -21,13 +21,6 @@ const maxHeightPercent = 0.8
  * App launcher modal.
  */
 export default function Launcher() {
-  const niri = AstalNiri.get_default()
-
-  const store = new Gio.ListStore<search.Result>()
-
-  const plugins = new search.Registry()
-  plugins.register(new apps.Plugin())
-
   let popup: Astal.Window
   let entry: Gtk.Entry
   let listbox: Gtk.ListBox
@@ -36,8 +29,14 @@ export default function Launcher() {
   const [width, setWidth] = createState(0)
   const [height, setHeight] = createState(0)
   const [margin, setMargin] = createState(0)
+  const [query, setQuery] = createState("")
 
-  function onVisible() {
+  const niri = AstalNiri.get_default()
+  const resultStore = new Gio.ListStore<search.Result>()
+  const searchPlugins = new search.Registry()
+  searchPlugins.register(new apps.Plugin())
+
+  function placeWindow() {
     const output = niri.focusedOutput
     const workarea = {
       w: output.logical.get_width(),
@@ -52,28 +51,11 @@ export default function Launcher() {
     setHeight(newHeight)
     setMargin(newMargin)
 
-    const gdkmonitor = app.monitors.find(
+    popup.gdkmonitor = app.monitors.find(
       (monitor) => monitor.model === output.model,
     )!
-    popup.gdkmonitor = gdkmonitor
     entry.grab_focus()
   }
-
-  const [query, setQuery] = createState("")
-  const doSearch = createDebounce(80, (query: string) => {
-    plugins.search(query).then((results) => {
-      store.splice(0, store.nItems, results)
-      if (store.nItems) {
-        const first = listbox.get_row_at_index(0)
-        if (!first) return
-        listbox.select_row(first)
-        scrollTo(first)
-      }
-    })
-  })
-  createEffect(() => {
-    doSearch(query())
-  })
 
   function scrollTo(row: Gtk.ListBoxRow) {
     scroller.vadjustment.set_value(
@@ -81,15 +63,11 @@ export default function Launcher() {
     )
   }
 
-  function onText() {
-    setQuery(entry.text)
-  }
-
   function onEnter() {
     const row = listbox.get_selected_row()
     if (!row) return
 
-    const result = store.get_item(row.get_index())
+    const result = resultStore.get_item(row.get_index())
     if (!result) return
 
     result.run({
@@ -121,7 +99,24 @@ export default function Launcher() {
     scrollTo(prev)
   }
 
-  const resultsVisible = createBinding(store, "nItems").as((n) => !!n)
+  const resultsVisible = createBinding(resultStore, "nItems").as((n) => !!n)
+
+  const searchDebounced = createDebounce(80, (query: string) => {
+    searchPlugins.search(query).then((results) => {
+      resultStore.splice(0, resultStore.nItems, results)
+      if (resultStore.nItems) {
+        const first = listbox.get_row_at_index(0)
+        if (!first) return
+        listbox.select_row(first)
+        scrollTo(first)
+      }
+    })
+  })
+
+  createEffect(() => {
+    const q = query()
+    searchDebounced(q)
+  })
 
   return (
     <Popup
@@ -131,7 +126,7 @@ export default function Launcher() {
       width={width}
       height={height}
       marginTop={margin}
-      onNotifyVisible={() => onVisible()}
+      onNotifyVisible={() => placeWindow()}
       init={(self) => (popup = self)}
     >
       <box orientation={Gtk.Orientation.VERTICAL}>
@@ -151,7 +146,7 @@ export default function Launcher() {
           $={(self) => (entry = self)}
           placeholderText="type something..."
           heightRequest={50}
-          onNotifyText={onText}
+          onNotifyText={() => setQuery(entry.text)}
           onActivate={onEnter}
         />
         <box
@@ -168,7 +163,7 @@ export default function Launcher() {
             <Gtk.ListBox
               $={(self) => {
                 listbox = self
-                self.bind_model(store, ListResult)
+                self.bind_model(resultStore, ListResult)
               }}
               onRowActivated={onEnter}
             />
