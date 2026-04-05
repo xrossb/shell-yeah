@@ -1,14 +1,15 @@
-import { Astal, Gdk, Gtk } from "ags/gtk4"
-import Popup from "@/src/components/Popup"
-import { Accessor, createBinding, createEffect, createState } from "ags"
-import Gio from "gi://Gio?version=2.0"
 import Icon from "@/src/components/Icon"
+import Popup from "@/src/components/Popup"
 import * as search from "@/src/lib/search"
-import AstalNiri from "gi://AstalNiri?version=0.1"
-import app from "ags/gtk4/app"
-import * as bar from "@/src/windows/Bar"
 import * as apps from "@/src/lib/search/apps"
+import * as bar from "@/src/windows/Bar"
+import { Accessor, createBinding, createEffect, createState } from "ags"
+import { Astal, Gdk, Gtk } from "ags/gtk4"
+import app from "ags/gtk4/app"
+import AstalNiri from "gi://AstalNiri?version=0.1"
+import Gio from "gi://Gio?version=2.0"
 import Pango from "gi://Pango?version=1.0"
+import createDebounce from "../lib/createDebounce"
 
 const name = "launcher"
 const maxWidthPixels = 700
@@ -59,8 +60,8 @@ export default function Launcher() {
   }
 
   const [query, setQuery] = createState("")
-  createEffect(async () => {
-    await plugins.search(query()).then((results) => {
+  const doSearch = createDebounce(80, (query: string) => {
+    plugins.search(query).then((results) => {
       store.splice(0, store.nItems, results)
       if (store.nItems) {
         const first = listbox.get_row_at_index(0)
@@ -69,6 +70,9 @@ export default function Launcher() {
         scrollTo(first)
       }
     })
+  })
+  createEffect(() => {
+    doSearch(query())
   })
 
   function scrollTo(row: Gtk.ListBoxRow) {
