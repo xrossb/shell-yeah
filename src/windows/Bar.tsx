@@ -73,5 +73,5 @@ function End() {
 }
 
 export function height() {
-  return app.get_window(name)?.get_height() ?? 0
+  return app.get_window(name)?.get_height() || 0
 }

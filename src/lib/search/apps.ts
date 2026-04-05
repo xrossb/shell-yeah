@@ -17,9 +17,9 @@ export class Plugin implements search.Plugin {
     const results = new Array<search.Result>(apps.length)
     for (const i in apps) {
       results[i] = new search.Result(
-        apps[i].iconName,
+        apps[i].iconName || apps[i].entry,
         apps[i].name,
-        apps[i].description ?? apps[i].entry,
+        apps[i].description || apps[i].entry,
         (ctx) => {
           apps[i].launch()
           ctx.close()
