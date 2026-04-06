@@ -8,6 +8,7 @@ import {
   onCleanup,
 } from "ags"
 import { Astal, Gtk } from "ags/gtk4"
+import Adw from "gi://Adw?version=1"
 import AstalNotifd from "gi://AstalNotifd?version=0.1"
 import GLib from "gi://GLib?version=2.0"
 import Notification from "../components/Notification"
@@ -18,7 +19,7 @@ const name = "notifications-popup"
 /**
  * Display for incoming notifications.
  */
-export default function Notifications() {
+export default function NotificationsPopup() {
   const notifd = AstalNotifd.get_default()
 
   const [notifications, setNotifications] = createState<
@@ -54,17 +55,19 @@ export default function Notifications() {
       anchor={Astal.WindowAnchor.TOP}
       resizable={false}
     >
-      <box orientation={Gtk.Orientation.VERTICAL} spacing={8}>
-        <For each={notifications}>
-          {(notification) =>
-            PopupNotification(notification, (hide) =>
-              setNotifications((ns) =>
-                ns.filter((existing) => existing.id !== hide.id),
-              ),
-            )
-          }
-        </For>
-      </box>
+      <Adw.Clamp maximumSize={400} widthRequest={400}>
+        <box orientation={Gtk.Orientation.VERTICAL} spacing={8}>
+          <For each={notifications}>
+            {(notification) =>
+              PopupNotification(notification, (hide) =>
+                setNotifications((ns) =>
+                  ns.filter((existing) => existing.id !== hide.id),
+                ),
+              )
+            }
+          </For>
+        </box>
+      </Adw.Clamp>
     </Window>
   )
 }
@@ -96,10 +99,7 @@ function PopupNotification(
         onEnter={() => pause()}
         onLeave={() => resume()}
       />
-      <Notification
-        notification={notification}
-        onDismiss={() => notification.dismiss()}
-      />
+      <Notification n={notification} onDismiss={onHide} />
     </box>
   )
 }

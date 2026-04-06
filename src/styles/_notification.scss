@@ -5,11 +5,16 @@
 #notifications-popup {
   background-color: transparent;
   padding: 8px;
+
+  .notification {
+    box-shadow: 0 0 4px vars.$base00;
+  }
 }
 
 .notification {
-  @extend .popup;
-  background-color: vars.$base00;
+  padding: 8px;
+  border-radius: 8px;
+  background-color: vars.$base01;
 
   .header {
     color: vars.$base03;

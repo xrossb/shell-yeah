@@ -7,35 +7,36 @@ import GLib from "gi://GLib?version=2.0"
 import Pango from "gi://Pango?version=1.0"
 
 export type Props = {
-  notification: AstalNotifd.Notification
-  onDismiss: () => void
+  n: AstalNotifd.Notification
+  onDismiss: (n: AstalNotifd.Notification) => void
 }
 
-export default function Notification({ notification, onDismiss }: Props) {
+export default function Notification({ n, onDismiss }: Props) {
   const { VERTICAL } = Gtk.Orientation
-
   const [closeVisible, setCloseVisible] = createState(false)
 
   return (
-    <Adw.Clamp maximumSize={400} class="notification">
-      <overlay>
-        <Gtk.EventControllerMotion
-          onEnter={() => setCloseVisible(true)}
-          onLeave={() => setCloseVisible(false)}
-        />
-        <box orientation={VERTICAL} widthRequest={400} spacing={8}>
-          <box spacing={8}>
-            {NotificationIcon(notification)}
-            <box orientation={VERTICAL}>
-              {Header(notification)}
-              {TextContent(notification)}
-            </box>
+    <overlay class="notification">
+      <Gtk.EventControllerMotion
+        onEnter={() => setCloseVisible(true)}
+        onLeave={() => setCloseVisible(false)}
+      />
+      <Gtk.GestureClick
+        button={Gdk.BUTTON_PRIMARY}
+        onReleased={() => n.actions.find((a) => a.id === "default")?.invoke()}
+      />
+      <box orientation={VERTICAL} widthRequest={400} spacing={8}>
+        <box spacing={8}>
+          {NotificationIcon(n)}
+          <box orientation={VERTICAL}>
+            {Header(n)}
+            {TextContent(n)}
           </box>
-          {Actions(notification)}
         </box>
-        {Close(closeVisible, onDismiss)}
-      </overlay>
-    </Adw.Clamp>
+        {Actions(n)}
+      </box>
+      {Close(closeVisible, () => onDismiss(n))}
+    </overlay>
   )
 }
 
@@ -96,7 +97,7 @@ function Actions(n: AstalNotifd.Notification) {
   return (
     <box class="actions" visible={!!actions.length} spacing={8} homogeneous>
       {actions.map((action) => (
-        <button onClicked={() => n.invoke(action.id)}>
+        <button onClicked={() => action.invoke()}>
           <label label={action.label} />
         </button>
       ))}

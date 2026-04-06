@@ -6,7 +6,7 @@ import BluetoothMenu from "@/src/windows/BluetoothMenu"
 import Dock from "@/src/windows/Dock"
 import Launcher from "@/src/windows/Launcher"
 import NetworkMenu from "@/src/windows/NetworkMenu"
-import Notifications from "@/src/windows/Notifications"
+import NotificationsPopup from "@/src/windows/NotificationsPopup"
 import NotificationsMenu from "@/src/windows/NotificationsMenu"
 import OSD from "@/src/windows/OSD"
 import PowerMenu from "@/src/windows/PowerMenu"
@@ -28,7 +28,7 @@ app.start({
     })
 
     OSD()
-    Notifications()
+    NotificationsPopup()
 
     Launcher()
     NotificationsMenu()

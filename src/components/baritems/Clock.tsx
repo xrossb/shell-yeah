@@ -1,6 +1,8 @@
 import BarItem from "@/src/components/BarItem"
 import Symbol from "@/src/components/Symbol"
 import { createBinding, createComputed } from "ags"
+import { Gdk, Gtk } from "ags/gtk4"
+import app from "ags/gtk4/app"
 import { createPoll } from "ags/time"
 import AstalNotifd from "gi://AstalNotifd?version=0.1"
 import GLib from "gi://GLib?version=2.0"
@@ -32,6 +34,10 @@ export default function Clock() {
       <Symbol
         visible={notifGlyph.as((glyph) => !!glyph)}
         glyph={notifGlyph.as((glyph) => glyph || "")}
+      />
+      <Gtk.GestureClick
+        button={Gdk.BUTTON_PRIMARY}
+        onPressed={() => app.toggle_window("notifications-menu")}
       />
     </BarItem>
   )
