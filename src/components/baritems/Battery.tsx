@@ -26,7 +26,7 @@ export default function Battery() {
   return (
     <BarItem name="battery" visible={isPresent} spacing={4}>
       <Icon icon={batteryIcon(battery)} />
-      <label label={batteryLabel(battery)} valign={Gtk.Align.BASELINE_CENTER} />
+      <label label={batteryLabel(battery)} valign={Gtk.Align.CENTER} />
     </BarItem>
   )
 }
