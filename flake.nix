@@ -22,7 +22,7 @@
   outputs = {nixpkgs, ...} @ inputs: let
     # Override nativeBuildInputs to replace wrapGAppsHook with wrapGAppsHook3.
     astal-niri = pkgs:
-      inputs.astal-niri.packages.${pkgs.system}.niri.overrideAttrs
+      inputs.astal-niri.packages.${pkgs.stdenv.hostPlatform.system}.niri.overrideAttrs
       (finalAttrs: prevAttrs: {
         nativeBuildInputs = with pkgs; [
           wrapGAppsHook4
@@ -80,7 +80,7 @@
         name = "shell-yeah";
         src = ./.;
 
-        pnpmDeps = pkgs.pnpm.fetchDeps {
+        pnpmDeps = pkgs.fetchPnpmDeps {
           inherit src;
           pname = name;
           fetcherVersion = 2;
@@ -90,7 +90,7 @@
         nativeBuildInputs = [
           pkgs.wrapGAppsHook4
           pkgs.gobject-introspection
-          pkgs.pnpm.configHook
+          pkgs.pnpmConfigHook
           ags.default
         ];
 
