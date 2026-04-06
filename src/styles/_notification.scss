@@ -1,0 +1,23 @@
+@use "base";
+@use "vars";
+@use "sass:color";
+
+#notifications-popup {
+  background-color: transparent;
+  padding: 8px;
+}
+
+.notification {
+  @extend .popup;
+  background-color: vars.$base00;
+
+  .header {
+    color: vars.$base03;
+  }
+
+  .close {
+    padding: 2px;
+    margin: -4px;
+    border-radius: 100%;
+  }
+}
