@@ -90,6 +90,7 @@
         nativeBuildInputs = [
           pkgs.wrapGAppsHook4
           pkgs.gobject-introspection
+          pkgs.pnpm
           pkgs.pnpmConfigHook
           ags.default
         ];
