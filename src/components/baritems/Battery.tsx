@@ -1,20 +1,21 @@
 import BarItem from "@/src/components/BarItem"
-import Symbol from "@/src/components/Symbol"
 import { createBinding, createComputed } from "ags"
+import { Gtk } from "ags/gtk4"
 import AstalBattery from "gi://AstalBattery?version=0.1"
+import Icon from "../Icon"
 
-const glyphs = {
-  charged: "\uf102",
-  charging: "\uea0b",
+const icons = {
+  charged: "sy-battery-charged",
+  charging: "sy-battery-charging",
   draining: [
-    { threshold: 5, icon: "\uf306" },
-    { threshold: 15, icon: "\uf30c" },
-    { threshold: 30, icon: "\uf30b" },
-    { threshold: 45, icon: "\uf30a" },
-    { threshold: 60, icon: "\uf309" },
-    { threshold: 75, icon: "\uf308" },
-    { threshold: 90, icon: "\uf307" },
-    { threshold: 100, icon: "\uf304" },
+    { threshold: 5, icon: "sy-battery-critical" },
+    { threshold: 15, icon: "sy-battery-15" },
+    { threshold: 30, icon: "sy-battery-30" },
+    { threshold: 45, icon: "sy-battery-45" },
+    { threshold: 60, icon: "sy-battery-60" },
+    { threshold: 75, icon: "sy-battery-75" },
+    { threshold: 90, icon: "sy-battery-90" },
+    { threshold: 100, icon: "sy-battery-full" },
   ],
 }
 
@@ -24,13 +25,13 @@ export default function Battery() {
 
   return (
     <BarItem name="battery" visible={isPresent} spacing={4}>
-      <Symbol glyph={batteryGlyph(battery)} />
-      <label label={batteryLabel(battery)} />
+      <Icon icon={batteryIcon(battery)} />
+      <label label={batteryLabel(battery)} valign={Gtk.Align.BASELINE_CENTER} />
     </BarItem>
   )
 }
 
-function batteryGlyph(battery: AstalBattery.Device) {
+function batteryIcon(battery: AstalBattery.Device) {
   const { CHARGING, FULLY_CHARGED } = AstalBattery.State
   const percent = createBinding(battery, "percentage")
   const state = createBinding(battery, "state")
@@ -38,16 +39,16 @@ function batteryGlyph(battery: AstalBattery.Device) {
   return createComputed(() => {
     switch (state()) {
       case FULLY_CHARGED:
-        return glyphs.charged
+        return icons.charged
       case CHARGING:
-        return glyphs.charging
+        return icons.charging
       default:
-        for (const pair of glyphs.draining) {
+        for (const pair of icons.draining) {
           if (percent() * 100 <= pair.threshold) {
             return pair.icon
           }
         }
-        return glyphs.draining[0].icon
+        return icons.draining[0].icon
     }
   })
 }

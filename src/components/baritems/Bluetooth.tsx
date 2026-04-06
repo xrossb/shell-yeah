@@ -1,12 +1,12 @@
 import BarItem from "@/src/components/BarItem"
-import Symbol from "@/src/components/Symbol"
 import AstalBluetooth from "gi://AstalBluetooth?version=0.1"
 import { createBinding, createComputed } from "ags"
+import Icon from "../Icon"
 
-const glyphs = {
-  connected: "\ue1a8",
-  on: "\ue1a7",
-  off: "\ue1a9",
+const icons = {
+  connected: "sy-bluetooth-connected",
+  on: "sy-bluetooth-on",
+  off: "sy-bluetooth-off",
 }
 
 export default function Bluetooth() {
@@ -15,15 +15,15 @@ export default function Bluetooth() {
   const powered = createBinding(bluetooth, "isPowered")
   const connected = createBinding(bluetooth, "isConnected")
   const visible = adapter.as((a) => !!a)
-  const glyph = createComputed(() => {
-    if (connected()) return glyphs.connected
-    if (powered()) return glyphs.on
-    return glyphs.off
+  const icon = createComputed(() => {
+    if (connected()) return icons.connected
+    if (powered()) return icons.on
+    return icons.off
   })
 
   return (
     <BarItem visible={visible}>
-      <Symbol glyph={glyph} />
+      <Icon icon={icon} />
     </BarItem>
   )
 }

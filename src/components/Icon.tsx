@@ -1,4 +1,5 @@
 import { Accessor } from "ags"
+import { Gtk } from "ags/gtk4"
 
 export type Props = {
   icon: string | Accessor<string>

@@ -50,7 +50,10 @@ function Workspace({ workspace }: { workspace: AstalNiri.Workspace }) {
         button={Gdk.BUTTON_PRIMARY}
         onPressed={() => workspace.focus()}
       />
-      <label label={workspace.idx.toString()} valign={Gtk.Align.CENTER} />
+      <label
+        label={workspace.idx.toString()}
+        valign={Gtk.Align.BASELINE_CENTER}
+      />
     </box>
   )
 }
