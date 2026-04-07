@@ -1,4 +1,5 @@
 @use "vars";
+@use "sass:color";
 
 window {
   all: unset;
@@ -13,5 +14,48 @@ window {
   border-width: 1px;
   border-style: solid;
   border-radius: 16px;
-  padding: 8px;
+  padding: 16px;
+}
+
+#audio-menu {
+  button {
+    /* padding: 0; */
+
+    &:not(:active):not(:hover) {
+      background-color: transparent;
+    }
+  }
+
+  .slider-box {
+    border-radius: 8px;
+
+    box {
+      padding-left: 10px;
+      border-radius: 8px;
+    }
+
+    scale {
+      padding: 0;
+
+      trough {
+        all: unset;
+        background: vars.$base02;
+        min-height: 36px;
+        border-radius: 8px;
+      }
+
+      highlight {
+        all: unset;
+        min-height: 36px;
+        border-radius: 8px;
+        background: color.scale(vars.$base0D, $alpha: -30%);
+      }
+
+      slider {
+        all: unset;
+        border-radius: 8px;
+        margin: 0;
+      }
+    }
+  }
 }
