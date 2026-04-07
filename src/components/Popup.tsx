@@ -3,6 +3,7 @@ import { PropsFor } from "@/src/lib/types"
 import { Accessor } from "ags"
 import { Astal, Gdk, Gtk } from "ags/gtk4"
 import Adw from "gi://Adw?version=1"
+import GLib from "gi://GLib?version=2.0"
 
 export type Props = PropsFor<typeof Window> & {
   width?: number | Accessor<number>
@@ -20,7 +21,13 @@ export default function Popup({ width, height, children, ...props }: Props) {
         if (w.visible) w.grab_focus()
       }}
       onNotifyIsActive={(self) => {
-        if (!self.isActive) self.hide()
+        if (self.isActive) return
+        // While opening/closing popovers, the window briefly becomes inactive.
+        // Deferring this check until idle ensures this property has settled.
+        GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+          if (!self.isActive) self.hide()
+          return GLib.SOURCE_REMOVE
+        })
       }}
       {...props}
     >
