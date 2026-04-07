@@ -126,8 +126,8 @@ export default function Launcher() {
       width={width}
       height={height}
       marginTop={margin}
+      $={(self) => (popup = self)}
       onNotifyVisible={() => placeWindow()}
-      init={(self) => (popup = self)}
     >
       <box orientation={Gtk.Orientation.VERTICAL}>
         <Gtk.EventControllerKey

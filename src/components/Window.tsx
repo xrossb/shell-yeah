@@ -1,24 +1,20 @@
-import { onCleanup, This } from "ags"
-import { Astal } from "ags/gtk4"
+import { onCleanup } from "ags"
 import app from "ags/gtk4/app"
 
-export type Props = JSX.IntrinsicElements["window"] & {
-  init?(self: Astal.Window): void
-}
+export type Props = JSX.IntrinsicElements["window"]
 
 /**
  * Window wired to clean itself up on scope closure.
  */
-export default function Window({ init, ...props }: Props) {
+export default function Window({ $, ...props }: Props) {
   return (
-    <This this={app}>
-      <window
-        $={(self) => {
-          if (init) init(self)
-          onCleanup(() => self.destroy())
-        }}
-        {...props}
-      />
-    </This>
+    <window
+      application={app}
+      $={(self) => {
+        onCleanup(() => self.destroy())
+        $?.(self)
+      }}
+      {...props}
+    />
   )
 }
