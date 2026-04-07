@@ -19,8 +19,7 @@
       FONTCONFIG_FILE = with pkgs;
         makeFontsConf {
           fontDirectories = [
-            nerd-fonts.jetbrains-mono
-            material-symbols
+            jetbrains-mono
           ];
         };
     };

@@ -4,7 +4,7 @@ window {
   all: unset;
   background-color: vars.$base00;
   color: vars.$base05;
-  font-family: "JetBrains Mono NF";
+  font-family: "JetBrains Mono";
   font-size: 14px;
 }
 
@@ -14,13 +14,4 @@ window {
   border-style: solid;
   border-radius: 16px;
   padding: 8px;
-}
-
-.symbol {
-  font-family: "Material Symbols Rounded";
-  font-variation-settings:
-    "FILL" 1,
-    "wght" 700,
-    "opsz" 16;
-  font-size: 16px;
 }

@@ -18,7 +18,6 @@
       wireplumber
       inputs'.astal-niri.packages.niri
     ];
-    jetbrains-mono = pkgs.nerd-fonts.jetbrains-mono;
   in {
     packages.default = pkgs.stdenv.mkDerivation rec {
       name = "shell-yeah";
@@ -42,8 +41,7 @@
 
       installPhase = ''
         mkdir -p $out/share/fonts
-        cp -r ${jetbrains-mono}/share/fonts/* $out/share/fonts
-        cp -r ${pkgs.material-symbols}/share/fonts/* $out/share/fonts
+        cp -r ${pkgs.jetbrains-mono}/share/fonts/* $out/share/fonts
         mkdir -p $out/bin
         mkdir -p $out/share/${name}
         cp -r assets/* $out/share/${name}
