@@ -9,7 +9,7 @@ export default function Network() {
   const visible = createComputed(() => !!(wifi() || wired()))
 
   return (
-    <BarItem visible={visible}>
+    <BarItem visible={visible} spacing={8}>
       <With value={wifi}>{(wifi) => wifi && <WifiIcon wifi={wifi} />}</With>
       <With value={wired}>
         {(wired) => wired && <WiredIcon wired={wired} />}
@@ -28,6 +28,7 @@ function WifiIcon({ wifi }: WifiProps) {
   const strength = createBinding(wifi, "strength")
   const icon = createComputed(() => {
     if (!enabled()) return "sy-wifi-off"
+    if (!connected()) return "sy-wifi-strong"
     if (strength() <= 25) return "sy-wifi-weak"
     if (strength() <= 50) return "sy-wifi-mid"
     return "sy-wifi-strong"
@@ -45,7 +46,9 @@ type WiredProps = {
 }
 
 function WiredIcon({ wired }: WiredProps) {
-  const connected = createBinding(wired, "connection").as((c) => !!c)
+  const connected = createBinding(wired, "state").as(
+    (s) => s === AstalNetwork.DeviceState.ACTIVATED,
+  )
   const opacity = connected.as((c) => (c ? 1 : 0.5))
   return <image iconName="sy-lan" opacity={opacity} />
 }
