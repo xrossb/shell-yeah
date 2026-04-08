@@ -5,7 +5,7 @@
     "jsx": "react-jsx",
     "jsxImportSource": "ags/gtk4",
     "lib": [
-      "ES2023"
+      "ESNext"
     ],
     "module": "ES2022",
     "moduleResolution": "Bundler",

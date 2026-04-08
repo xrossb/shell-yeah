@@ -4,10 +4,16 @@ import { Gdk, Gtk } from "ags/gtk4"
 import app from "ags/gtk4/app"
 import { createPoll } from "ags/time"
 import AstalNotifd from "gi://AstalNotifd?version=0.1"
-import GLib from "gi://GLib?version=2.0"
 import Icon from "../Icon"
 
-const format = "%a, %d %b · %I:%M %P"
+const lang = Gtk.get_default_language().to_string()
+const format = new Intl.DateTimeFormat(lang, {
+  month: "short",
+  day: "numeric",
+  weekday: "short",
+  hour: "numeric",
+  minute: "numeric",
+})
 const icons = {
   off: "sy-notifications-off",
   unread: "sy-notifications-unread",
@@ -22,10 +28,8 @@ export default function Clock() {
     if (unreads()) return icons.unread
   })
 
-  const time = createPoll(
-    "",
-    1000,
-    () => GLib.DateTime.new_now_local().format(format) || "",
+  const time = createPoll("", 1000, () =>
+    format.format(Temporal.Now.plainDateTimeISO()),
   )
 
   return (
