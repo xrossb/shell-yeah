@@ -129,7 +129,7 @@ export default function Launcher() {
       $={(self) => (popup = self)}
       onNotifyVisible={() => placeWindow()}
     >
-      <box orientation={Gtk.Orientation.VERTICAL}>
+      <box orientation={Gtk.Orientation.VERTICAL} spacing={8}>
         <Gtk.EventControllerKey
           onKeyPressed={(self, keyval) => {
             switch (keyval) {
@@ -153,6 +153,7 @@ export default function Launcher() {
           visible={resultsVisible}
           orientation={Gtk.Orientation.VERTICAL}
           canFocus={false}
+          spacing={8}
         >
           <Gtk.Separator />
           <Gtk.ScrolledWindow
@@ -176,7 +177,7 @@ export default function Launcher() {
 
 function ListResult(result: search.Result) {
   return (
-    <box>
+    <box spacing={8}>
       <Icon icon={result.icon} size={36} />
       <box orientation={Gtk.Orientation.VERTICAL} valign={Gtk.Align.CENTER}>
         <label

@@ -1,40 +1,25 @@
 @use "vars";
 
 #launcher {
-  font-size: 18px;
-  font-weight: normal;
-}
+  entry {
+    font-size: 18px;
+    background-color: transparent;
+    outline: none;
+    border-style: none;
+    border-radius: 8px;
+  }
 
-#launcher * {
-  outline: none;
-}
+  list > * {
+    padding: 8px;
+    border-radius: 8px;
+  }
 
-#launcher entry {
-  background-color: transparent;
-  border-style: none;
-  border-radius: 8px;
-}
+  .title {
+    font-size: 18px;
+  }
 
-#launcher separator {
-  color: vars.$base04;
-}
-
-#launcher separator {
-  margin-top: 8px;
-  margin-bottom: 8px;
-}
-
-#launcher list > * {
-  padding: 8px;
-  border-radius: 8px;
-}
-
-#launcher .title {
-  font-size: 18px;
-  margin-left: 8px;
-}
-
-#launcher .description {
-  font-size: 14px;
-  margin-left: 8px;
+  .description {
+    font-size: 14px;
+    color: vars.$base04;
+  }
 }
