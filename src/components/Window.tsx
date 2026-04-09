@@ -10,7 +10,7 @@ export default function Window({ $, ...props }: Props) {
   return (
     <window
       application={app}
-      $={self => {
+      $={(self) => {
         onCleanup(() => self.destroy())
         $?.(self)
       }}

@@ -24,7 +24,7 @@ export default function EachMonitor(fn: (monitor: Gdk.Monitor) => void) {
     // Register scopes for newly connected monitors.
     for (const newMonitor of newMonitors) {
       if (!oldMonitors.has(newMonitor)) {
-        createRoot(dispose => {
+        createRoot((dispose) => {
           fn(newMonitor)
           oldMonitors.set(newMonitor, dispose)
         })

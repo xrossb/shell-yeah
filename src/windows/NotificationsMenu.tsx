@@ -12,7 +12,7 @@ const name = "notifications-menu"
  */
 export default function NotificationsMenu() {
   const notifd = AstalNotifd.get_default()
-  const ns = createBinding(notifd, "notifications").as(ns =>
+  const ns = createBinding(notifd, "notifications").as((ns) =>
     ns.sort((a, b) => b.time - a.time),
   )
 
@@ -39,11 +39,11 @@ function NotificationList(ns: Accessor<AstalNotifd.Notification[]>) {
     <scrolledwindow
       propagateNaturalHeight
       hscrollbarPolicy={Gtk.PolicyType.NEVER}
-      visible={ns(ns => ns.length !== 0)}
+      visible={ns((ns) => ns.length !== 0)}
     >
       <box class={"list"} orientation={Gtk.Orientation.VERTICAL} spacing={8}>
         <For each={ns}>
-          {n => <Notification n={n} onDismiss={() => n.dismiss()} />}
+          {(n) => <Notification n={n} onDismiss={() => n.dismiss()} />}
         </For>
       </box>
     </scrolledwindow>
@@ -56,7 +56,7 @@ function Empty(ns: Accessor<AstalNotifd.Notification[]>) {
       halign={Gtk.Align.CENTER}
       valign={Gtk.Align.CENTER}
       vexpand
-      visible={ns(ns => ns.length === 0)}
+      visible={ns((ns) => ns.length === 0)}
       label="all caught up!"
     />
   )

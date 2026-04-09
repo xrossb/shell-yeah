@@ -1,6 +1,6 @@
-import { createBinding, createComputed, With } from "ags"
-import AstalNetwork from "gi://AstalNetwork?version=0.1"
 import BarItem from "@/src/components/BarItem"
+import AstalNetwork from "gi://AstalNetwork?version=0.1"
+import { createBinding, createComputed, With } from "ags"
 
 export default function Network() {
   const network = AstalNetwork.get_default()
@@ -10,8 +10,10 @@ export default function Network() {
 
   return (
     <BarItem visible={visible} spacing={8}>
-      <With value={wifi}>{wifi => wifi && <WifiIcon wifi={wifi} />}</With>
-      <With value={wired}>{wired => wired && <WiredIcon wired={wired} />}</With>
+      <With value={wifi}>{(wifi) => wifi && <WifiIcon wifi={wifi} />}</With>
+      <With value={wired}>
+        {(wired) => wired && <WiredIcon wired={wired} />}
+      </With>
     </BarItem>
   )
 }
@@ -22,7 +24,7 @@ type WifiProps = {
 
 function WifiIcon({ wifi }: WifiProps) {
   const enabled = createBinding(wifi, "enabled")
-  const connected = createBinding(wifi, "activeConnection").as(c => !!c)
+  const connected = createBinding(wifi, "activeConnection").as((c) => !!c)
   const strength = createBinding(wifi, "strength")
   const icon = createComputed(() => {
     if (!enabled()) return "sy-wifi-off"
@@ -45,8 +47,8 @@ type WiredProps = {
 
 function WiredIcon({ wired }: WiredProps) {
   const connected = createBinding(wired, "state").as(
-    s => s === AstalNetwork.DeviceState.ACTIVATED,
+    (s) => s === AstalNetwork.DeviceState.ACTIVATED,
   )
-  const opacity = connected.as(c => (c ? 1 : 0.5))
+  const opacity = connected.as((c) => (c ? 1 : 0.5))
   return <image iconName="sy-lan" opacity={opacity} />
 }

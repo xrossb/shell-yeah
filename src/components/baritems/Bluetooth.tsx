@@ -1,6 +1,6 @@
-import { createBinding, createComputed } from "ags"
-import AstalBluetooth from "gi://AstalBluetooth?version=0.1"
 import BarItem from "@/src/components/BarItem"
+import AstalBluetooth from "gi://AstalBluetooth?version=0.1"
+import { createBinding, createComputed } from "ags"
 import Icon from "../Icon"
 
 const icons = {
@@ -14,7 +14,7 @@ export default function Bluetooth() {
   const adapter = createBinding(bluetooth, "adapter")
   const powered = createBinding(bluetooth, "isPowered")
   const connected = createBinding(bluetooth, "isConnected")
-  const visible = adapter.as(a => !!a)
+  const visible = adapter.as((a) => !!a)
   const icon = createComputed(() => {
     if (connected()) return icons.connected
     if (powered()) return icons.on
