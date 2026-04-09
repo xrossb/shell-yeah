@@ -1,6 +1,7 @@
 import { With, createBinding, createComputed } from "ags"
 import AstalNetwork from "gi://AstalNetwork?version=0.1"
 import BarItem from "@/src/components/BarItem"
+import { icons } from "@/src/lib/icons"
 
 export default function Network() {
   const network = AstalNetwork.get_default()
@@ -27,11 +28,9 @@ function WifiIcon({ wifi }: WifiProps) {
   const connected = createBinding(wifi, "activeConnection").as((c) => !!c)
   const strength = createBinding(wifi, "strength")
   const icon = createComputed(() => {
-    if (!enabled()) return "sy-wifi-off"
-    if (!connected()) return "sy-wifi-strong"
-    if (strength() <= 25) return "sy-wifi-weak"
-    if (strength() <= 50) return "sy-wifi-mid"
-    return "sy-wifi-strong"
+    if (!enabled()) return icons.network.wifi.off
+    if (!connected()) return icons.network.wifi.strong
+    return icons.network.wifi.byPercent(strength() / 100)
   })
   const opacity = createComputed(() => {
     if (enabled() && !connected()) return 0.5
@@ -50,5 +49,5 @@ function WiredIcon({ wired }: WiredProps) {
     (s) => s === AstalNetwork.DeviceState.ACTIVATED,
   )
   const opacity = connected.as((c) => (c ? 1 : 0.5))
-  return <image iconName="sy-lan" opacity={opacity} />
+  return <image iconName={icons.network.wired.on} opacity={opacity} />
 }

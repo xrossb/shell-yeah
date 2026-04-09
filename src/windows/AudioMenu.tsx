@@ -7,6 +7,7 @@ import AstalWp from "gi://AstalWp?version=0.1"
 import Gio from "gi://Gio?version=2.0"
 import Pango from "gi://Pango?version=1.0"
 import Popup from "@/src/components/Popup"
+import { icons } from "@/src/lib/icons"
 
 const name = "audio-menu"
 
@@ -43,7 +44,7 @@ function DeviceControls() {
         {(speaker) => (
           <DeviceSlider
             endpoint={speaker}
-            icons={{ normal: "sy-volume-high", mute: "sy-volume-off" }}
+            deviceIcons={{ normal: icons.volume.high, mute: icons.volume.off }}
           />
         )}
       </With>
@@ -51,7 +52,7 @@ function DeviceControls() {
         {(microphone) => (
           <DeviceSlider
             endpoint={microphone}
-            icons={{ normal: "sy-mic", mute: "sy-mic-off" }}
+            deviceIcons={{ normal: icons.mic.on, mute: icons.mic.off }}
           />
         )}
       </With>
@@ -61,13 +62,13 @@ function DeviceControls() {
 
 type SliderProps = {
   endpoint: AstalWp.Endpoint
-  icons: {
+  deviceIcons: {
     normal: string
     mute: string
   }
 }
 
-function DeviceSlider({ endpoint, icons }: SliderProps) {
+function DeviceSlider({ endpoint, deviceIcons }: SliderProps) {
   const volume = createBinding(endpoint, "volume")
   const mute = createBinding(endpoint, "mute")
 
@@ -75,7 +76,9 @@ function DeviceSlider({ endpoint, icons }: SliderProps) {
     <box>
       <button class="no-bg" onClicked={() => (endpoint.mute = !endpoint.mute)}>
         <image
-          iconName={mute.as((m) => (m ? icons?.mute : icons?.normal))}
+          iconName={mute.as((m) =>
+            m ? deviceIcons?.mute : deviceIcons?.normal,
+          )}
           pixelSize={20}
         />
       </button>
@@ -87,7 +90,7 @@ function DeviceSlider({ endpoint, icons }: SliderProps) {
         }}
       />
       <button class="no-bg">
-        <image iconName="sy-chevron-right" pixelSize={20} />
+        <image iconName={icons.arrows.right} pixelSize={20} />
       </button>
     </box>
   )
@@ -137,8 +140,8 @@ function PlayerContent({ player }: PlayerProps) {
   )
   const playIcon = createBinding(player, "playbackStatus").as((s) =>
     s === AstalMpris.PlaybackStatus.PLAYING
-      ? "sy-player-pause"
-      : "sy-player-play",
+      ? icons.player.pause
+      : icons.player.play,
   )
   const app = apps.list.find((a) => a.entry === player.entry)
 
@@ -203,7 +206,7 @@ function PlayerContent({ player }: PlayerProps) {
             focusOnClick={false}
             visible={createBinding(player, "canGoPrevious")}
           >
-            <image iconName="sy-player-prev" pixelSize={20} />
+            <image iconName={icons.player.prev} pixelSize={20} />
           </button>
           <button
             class="no-bg"
@@ -219,7 +222,7 @@ function PlayerContent({ player }: PlayerProps) {
             focusOnClick={false}
             visible={createBinding(player, "canGoNext")}
           >
-            <image iconName="sy-player-next" pixelSize={20} />
+            <image iconName={icons.player.next} pixelSize={20} />
           </button>
         </box>
       </box>

@@ -5,6 +5,7 @@ import AstalNotifd from "gi://AstalNotifd?version=0.1"
 import GLib from "gi://GLib?version=2.0"
 import Gio from "gi://Gio?version=2.0"
 import Pango from "gi://Pango?version=1.0"
+import { icons } from "@/src/lib/icons"
 
 export type Props = {
   n: AstalNotifd.Notification
@@ -115,7 +116,7 @@ function Close(visible: Accessor<boolean>, onClick: () => void) {
       halign={Gtk.Align.END}
       valign={Gtk.Align.START}
     >
-      <image pixelSize={16} iconName="sy-close" />
+      <image pixelSize={16} iconName={icons.close} />
     </button>
   )
 }

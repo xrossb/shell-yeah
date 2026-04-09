@@ -6,20 +6,16 @@ import AstalNotifd from "gi://AstalNotifd?version=0.1"
 import GLib from "gi://GLib?version=2.0"
 import BarItem from "@/src/components/BarItem"
 import Icon from "@/src/components/Icon"
+import { icons } from "@/src/lib/icons"
 import { config } from "@/src/lib/options"
-
-const icons = {
-  off: "sy-notifications-off",
-  unread: "sy-notifications-unread",
-}
 
 export default function Clock() {
   const notifd = AstalNotifd.get_default()
   const dontDisturb = createBinding(notifd, "dontDisturb")
   const unreads = createBinding(notifd, "notifications").as((n) => n.length)
   const notifIcon = createComputed(() => {
-    if (dontDisturb()) return icons.off
-    if (unreads()) return icons.unread
+    if (dontDisturb()) return icons.notifications.off
+    if (unreads()) return icons.notifications.unread
   })
 
   const time = createPoll(

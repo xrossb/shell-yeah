@@ -3,21 +3,7 @@ import { Gtk } from "ags/gtk4"
 import AstalBattery from "gi://AstalBattery?version=0.1"
 import BarItem from "@/src/components/BarItem"
 import Icon from "@/src/components/Icon"
-
-const icons = {
-  charged: "sy-battery-charged",
-  charging: "sy-battery-charging",
-  draining: [
-    { threshold: 5, icon: "sy-battery-critical" },
-    { threshold: 15, icon: "sy-battery-15" },
-    { threshold: 30, icon: "sy-battery-30" },
-    { threshold: 45, icon: "sy-battery-45" },
-    { threshold: 60, icon: "sy-battery-60" },
-    { threshold: 75, icon: "sy-battery-75" },
-    { threshold: 90, icon: "sy-battery-90" },
-    { threshold: 100, icon: "sy-battery-full" },
-  ],
-}
+import { icons } from "@/src/lib/icons"
 
 export default function Battery() {
   const battery = AstalBattery.get_default()
@@ -39,16 +25,11 @@ function batteryIcon(battery: AstalBattery.Device) {
   return createComputed(() => {
     switch (state()) {
       case FULLY_CHARGED:
-        return icons.charged
+        return icons.battery.charged
       case CHARGING:
-        return icons.charging
+        return icons.battery.charging
       default:
-        for (const pair of icons.draining) {
-          if (percent() * 100 <= pair.threshold) {
-            return pair.icon
-          }
-        }
-        return icons.draining[0].icon
+        return icons.battery.byPercent(percent())
     }
   })
 }
