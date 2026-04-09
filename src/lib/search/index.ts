@@ -5,7 +5,7 @@ import GObject, { property, register } from "ags/gobject"
  * plugins simultaneously.
  */
 export class Registry {
-  #plugins: Array<Plugin>
+  #plugins: Plugin[]
 
   constructor() {
     this.#plugins = []
@@ -15,11 +15,11 @@ export class Registry {
     this.#plugins.push(plugin)
   }
 
-  async search(query: string) {
+  search(query: string) {
     const results = new Array<Result>()
 
     for (const plugin of this.#plugins) {
-      const add = await plugin.search(query)
+      const add = plugin.search(query)
       results.push(...add)
     }
 
@@ -31,7 +31,7 @@ export class Registry {
  * Interface for search plugins.
  */
 export type Plugin = {
-  search(query: string): Promise<Array<Result>>
+  search(query: string): Result[]
 }
 
 export type Context = {

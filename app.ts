@@ -23,13 +23,13 @@ app.start({
   main() {
     EachMonitor(monitor => {
       Bar({ monitor })
-      Dock({ monitor })
       Wallpaper({ monitor })
     })
 
     OSD()
     NotificationsPopup()
 
+    Dock()
     Launcher()
     NotificationsMenu()
     BatteryMenu()

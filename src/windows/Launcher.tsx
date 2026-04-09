@@ -102,15 +102,14 @@ export default function Launcher() {
   const resultsVisible = createBinding(resultStore, "nItems").as(n => !!n)
 
   const searchDebounced = createDebounce(80, (query: string) => {
-    searchPlugins.search(query).then(results => {
-      resultStore.splice(0, resultStore.nItems, results)
-      if (resultStore.nItems) {
-        const first = listbox.get_row_at_index(0)
-        if (!first) return
-        listbox.select_row(first)
-        scrollTo(first)
-      }
-    })
+    const results = searchPlugins.search(query)
+    resultStore.splice(0, resultStore.nItems, results)
+    if (resultStore.nItems) {
+      const first = listbox.get_row_at_index(0)
+      if (!first) return
+      listbox.select_row(first)
+      scrollTo(first)
+    }
   })
 
   createEffect(() => {
