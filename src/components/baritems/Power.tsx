@@ -1,5 +1,5 @@
 import BarItem from "@/src/components/BarItem"
-import Icon from "../Icon"
+import Icon from "@/src/components/Icon"
 
 export default function Power() {
   return (

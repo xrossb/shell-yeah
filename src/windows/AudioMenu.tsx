@@ -6,7 +6,7 @@ import AstalMpris from "gi://AstalMpris?version=0.1"
 import AstalWp from "gi://AstalWp?version=0.1"
 import Gio from "gi://Gio?version=2.0"
 import Pango from "gi://Pango?version=1.0"
-import Popup from "../components/Popup"
+import Popup from "@/src/components/Popup"
 
 const name = "audio-menu"
 

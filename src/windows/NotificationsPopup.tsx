@@ -3,8 +3,8 @@ import { Astal, Gtk } from "ags/gtk4"
 import Adw from "gi://Adw?version=1"
 import AstalNotifd from "gi://AstalNotifd?version=0.1"
 import GLib from "gi://GLib?version=2.0"
-import Notification from "../components/Notification"
-import Window from "../components/Window"
+import Notification from "@/src/components/Notification"
+import Window from "@/src/components/Window"
 
 const name = "notifications-popup"
 

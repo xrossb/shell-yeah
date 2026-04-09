@@ -2,7 +2,7 @@ import { createBinding, createComputed } from "ags"
 import { Gtk } from "ags/gtk4"
 import AstalBattery from "gi://AstalBattery?version=0.1"
 import BarItem from "@/src/components/BarItem"
-import Icon from "../Icon"
+import Icon from "@/src/components/Icon"
 
 const icons = {
   charged: "sy-battery-charged",

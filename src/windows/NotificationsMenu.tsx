@@ -2,8 +2,8 @@ import { Accessor, For, createBinding } from "ags"
 import { Astal, Gtk } from "ags/gtk4"
 import app from "ags/gtk4/app"
 import AstalNotifd from "gi://AstalNotifd?version=0.1"
-import Notification from "../components/Notification"
-import Popup from "../components/Popup"
+import Notification from "@/src/components/Notification"
+import Popup from "@/src/components/Popup"
 
 const name = "notifications-menu"
 

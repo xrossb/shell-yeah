@@ -6,10 +6,10 @@ import Gio from "gi://Gio?version=2.0"
 import Pango from "gi://Pango?version=1.0"
 import Icon from "@/src/components/Icon"
 import Popup from "@/src/components/Popup"
+import createDebounce from "@/src/lib/createDebounce"
 import * as search from "@/src/lib/search"
 import * as apps from "@/src/lib/search/apps"
 import * as bar from "@/src/windows/Bar"
-import createDebounce from "../lib/createDebounce"
 
 const name = "launcher"
 const maxWidthPixels = 700

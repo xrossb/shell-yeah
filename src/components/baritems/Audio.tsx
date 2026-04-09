@@ -3,7 +3,7 @@ import app from "ags/gtk4/app"
 import AstalWp from "gi://AstalWp?version=0.1"
 import { createBinding, createComputed } from "gnim"
 import BarItem from "@/src/components/BarItem"
-import Icon from "../Icon"
+import Icon from "@/src/components/Icon"
 
 export default function Audio() {
   const wp = AstalWp.get_default()

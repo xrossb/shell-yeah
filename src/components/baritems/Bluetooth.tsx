@@ -1,7 +1,7 @@
 import { createBinding, createComputed } from "ags"
 import AstalBluetooth from "gi://AstalBluetooth?version=0.1"
 import BarItem from "@/src/components/BarItem"
-import Icon from "../Icon"
+import Icon from "@/src/components/Icon"
 
 const icons = {
   connected: "sy-bluetooth-connected",
