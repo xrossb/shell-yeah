@@ -1,4 +1,4 @@
-import { Accessor, createBinding, For, With } from "ags"
+import { createBinding, For, With } from "ags"
 import { Astal, Gtk } from "ags/gtk4"
 import Adw from "gi://Adw?version=1"
 import AstalApps from "gi://AstalApps?version=0.1"
@@ -6,7 +6,6 @@ import AstalMpris from "gi://AstalMpris?version=0.1"
 import AstalWp from "gi://AstalWp?version=0.1"
 import Gio from "gi://Gio?version=2.0"
 import Pango from "gi://Pango?version=1.0"
-import Icon from "../components/Icon"
 import Popup from "../components/Popup"
 
 const name = "audio-menu"

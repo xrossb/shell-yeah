@@ -14,7 +14,7 @@ export class Plugin implements search.Plugin {
 
     this.#apps.reload()
     const apps = this.#apps.fuzzy_query(query)
-    const results = new Array<search.Result>(apps.length)
+    const results: search.Result[] = Array.from({ length: apps.length })
     for (const i in apps) {
       results[i] = new search.Result(
         apps[i].iconName || apps[i].entry,

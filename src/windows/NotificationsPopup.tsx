@@ -1,12 +1,4 @@
-import {
-  Accessor,
-  createBinding,
-  createComputed,
-  createState,
-  For,
-  Node,
-  onCleanup,
-} from "ags"
+import { createBinding, createComputed, createState, For, onCleanup } from "ags"
 import { Astal, Gtk } from "ags/gtk4"
 import Adw from "gi://Adw?version=1"
 import AstalNotifd from "gi://AstalNotifd?version=0.1"

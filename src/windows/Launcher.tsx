@@ -1,4 +1,4 @@
-import { Accessor, createBinding, createEffect, createState } from "ags"
+import { createBinding, createEffect, createState } from "ags"
 import { Astal, Gdk, Gtk } from "ags/gtk4"
 import app from "ags/gtk4/app"
 import AstalNiri from "gi://AstalNiri?version=0.1"
@@ -131,7 +131,7 @@ export default function Launcher() {
     >
       <box orientation={Gtk.Orientation.VERTICAL} spacing={8}>
         <Gtk.EventControllerKey
-          onKeyPressed={(self, keyval) => {
+          onKeyPressed={(_self, keyval) => {
             switch (keyval) {
               case Gdk.KEY_Down:
                 selectNext()
