@@ -1,4 +1,4 @@
-import { createBinding, For, With } from "ags"
+import { For, With, createBinding } from "ags"
 import { Astal, Gtk } from "ags/gtk4"
 import Adw from "gi://Adw?version=1"
 import AstalApps from "gi://AstalApps?version=0.1"

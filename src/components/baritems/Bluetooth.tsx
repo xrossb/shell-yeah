@@ -1,6 +1,6 @@
-import BarItem from "@/src/components/BarItem"
-import AstalBluetooth from "gi://AstalBluetooth?version=0.1"
 import { createBinding, createComputed } from "ags"
+import AstalBluetooth from "gi://AstalBluetooth?version=0.1"
+import BarItem from "@/src/components/BarItem"
 import Icon from "../Icon"
 
 const icons = {

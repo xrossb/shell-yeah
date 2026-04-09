@@ -1,4 +1,4 @@
-import { Accessor, createBinding, For } from "ags"
+import { Accessor, For, createBinding } from "ags"
 import { Astal, Gtk } from "ags/gtk4"
 import app from "ags/gtk4/app"
 import AstalNotifd from "gi://AstalNotifd?version=0.1"

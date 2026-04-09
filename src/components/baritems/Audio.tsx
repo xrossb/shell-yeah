@@ -1,8 +1,8 @@
-import BarItem from "@/src/components/BarItem"
 import { Gdk, Gtk } from "ags/gtk4"
 import app from "ags/gtk4/app"
 import AstalWp from "gi://AstalWp?version=0.1"
 import { createBinding, createComputed } from "gnim"
+import BarItem from "@/src/components/BarItem"
 import Icon from "../Icon"
 
 export default function Audio() {

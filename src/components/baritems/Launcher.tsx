@@ -1,7 +1,7 @@
-import BarItem from "@/src/components/BarItem"
 import { Gdk, Gtk } from "ags/gtk4"
 import app from "ags/gtk4/app"
-import Icon from "../Icon"
+import BarItem from "@/src/components/BarItem"
+import Icon from "@/src/components/Icon"
 
 export default function Launcher() {
   return (

@@ -1,9 +1,9 @@
-import Window from "@/src/components/Window"
-import { PropsFor } from "@/src/lib/types"
 import { Accessor } from "ags"
 import { Astal, Gdk, Gtk } from "ags/gtk4"
 import Adw from "gi://Adw?version=1"
 import GLib from "gi://GLib?version=2.0"
+import Window from "@/src/components/Window"
+import { PropsFor } from "@/src/lib/types"
 
 export type Props = PropsFor<typeof Window> & {
   width?: number | Accessor<number>

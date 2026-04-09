@@ -1,8 +1,8 @@
-import { createBinding, For } from "ags"
+import { For, createBinding } from "ags"
 import AstalTray from "gi://AstalTray?version=0.1"
-import BarItem from "@/src/components/BarItem"
 import Gdk from "gi://Gdk?version=4.0"
 import Gtk from "gi://Gtk?version=4.0"
+import BarItem from "@/src/components/BarItem"
 
 export default function Tray() {
   const tray = AstalTray.get_default()

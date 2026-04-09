@@ -1,5 +1,5 @@
-import * as search from "@/src/lib/search"
 import AstalApps from "gi://AstalApps?version=0.1"
+import * as search from "@/src/lib/search"
 
 /**
  * Search plugin which returns installed applications.

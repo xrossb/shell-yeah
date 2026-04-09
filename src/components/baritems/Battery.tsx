@@ -1,7 +1,7 @@
-import BarItem from "@/src/components/BarItem"
 import { createBinding, createComputed } from "ags"
 import { Gtk } from "ags/gtk4"
 import AstalBattery from "gi://AstalBattery?version=0.1"
+import BarItem from "@/src/components/BarItem"
 import Icon from "../Icon"
 
 const icons = {

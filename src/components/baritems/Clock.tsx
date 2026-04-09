@@ -1,10 +1,10 @@
-import BarItem from "@/src/components/BarItem"
 import { createBinding, createComputed } from "ags"
 import { Gdk, Gtk } from "ags/gtk4"
 import app from "ags/gtk4/app"
 import { createPoll } from "ags/time"
 import AstalNotifd from "gi://AstalNotifd?version=0.1"
 import GLib from "gi://GLib?version=2.0"
+import BarItem from "@/src/components/BarItem"
 import Icon from "../Icon"
 
 const format = "%a, %d %b · %I:%M %P"

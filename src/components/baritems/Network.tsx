@@ -1,6 +1,6 @@
-import BarItem from "@/src/components/BarItem"
+import { With, createBinding, createComputed } from "ags"
 import AstalNetwork from "gi://AstalNetwork?version=0.1"
-import { createBinding, createComputed, With } from "ags"
+import BarItem from "@/src/components/BarItem"
 
 export default function Network() {
   const network = AstalNetwork.get_default()

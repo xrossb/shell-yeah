@@ -1,4 +1,4 @@
-import { createBinding, createComputed, For } from "ags"
+import { For, createBinding, createComputed } from "ags"
 import { Gdk, Gtk } from "ags/gtk4"
 import AstalNiri from "gi://AstalNiri?version=0.1"
 

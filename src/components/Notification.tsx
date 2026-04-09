@@ -1,9 +1,9 @@
-import { Accessor, createState, Node } from "ags"
+import { Accessor, Node, createState } from "ags"
 import { Gdk, Gtk } from "ags/gtk4"
 import Adw from "gi://Adw?version=1"
 import AstalNotifd from "gi://AstalNotifd?version=0.1"
-import Gio from "gi://Gio?version=2.0"
 import GLib from "gi://GLib?version=2.0"
+import Gio from "gi://Gio?version=2.0"
 import Pango from "gi://Pango?version=1.0"
 
 export type Props = {
