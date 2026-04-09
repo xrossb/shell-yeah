@@ -1,7 +1,7 @@
-import BarItem from "@/src/components/BarItem"
 import { createBinding, createComputed } from "ags"
 import { Gtk } from "ags/gtk4"
 import AstalBattery from "gi://AstalBattery?version=0.1"
+import BarItem from "@/src/components/BarItem"
 import Icon from "../Icon"
 
 const icons = {
@@ -55,5 +55,5 @@ function batteryIcon(battery: AstalBattery.Device) {
 
 function batteryLabel(battery: AstalBattery.Device) {
   const percent = createBinding(battery, "percentage")
-  return percent.as((p) => `${Math.floor(p * 100)}%`)
+  return percent.as(p => `${Math.floor(p * 100)}%`)
 }

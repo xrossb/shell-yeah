@@ -1,3 +1,5 @@
+import { Astal, Gdk } from "ags/gtk4"
+import app from "ags/gtk4/app"
 import Audio from "@/src/components/baritems/Audio"
 import Battery from "@/src/components/baritems/Battery"
 import Bluetooth from "@/src/components/baritems/Bluetooth"
@@ -8,8 +10,6 @@ import Power from "@/src/components/baritems/Power"
 import Tray from "@/src/components/baritems/Tray"
 import Workspaces from "@/src/components/baritems/Workspaces"
 import Window from "@/src/components/Window"
-import { Astal, Gdk } from "ags/gtk4"
-import app from "ags/gtk4/app"
 
 export const name = "bar"
 

@@ -30,16 +30,16 @@ export default function NotificationsPopup() {
 
   const notifiedHandle = notifd.connect("notified", (_, id, replaced) => {
     const notification = notifd.get_notification(id)!
-    if (replaced && notifications.peek().some((n) => n.id === id)) {
-      setNotifications((ns) => ns.map((n) => (n.id === id ? notification : n)))
+    if (replaced && notifications.peek().some(n => n.id === id)) {
+      setNotifications(ns => ns.map(n => (n.id === id ? notification : n)))
     } else {
-      setNotifications((ns) => [notification, ...ns])
+      setNotifications(ns => [notification, ...ns])
     }
   })
   onCleanup(() => notifd.disconnect(notifiedHandle))
 
   const resolvedHandle = notifd.connect("resolved", (_, id) => {
-    setNotifications((ns) => ns.filter((n) => n.id !== id))
+    setNotifications(ns => ns.filter(n => n.id !== id))
   })
   onCleanup(() => notifd.disconnect(resolvedHandle))
 
@@ -58,10 +58,10 @@ export default function NotificationsPopup() {
       <Adw.Clamp maximumSize={400} widthRequest={400}>
         <box orientation={Gtk.Orientation.VERTICAL} spacing={8}>
           <For each={notifications}>
-            {(notification) =>
-              PopupNotification(notification, (hide) =>
-                setNotifications((ns) =>
-                  ns.filter((existing) => existing.id !== hide.id),
+            {notification =>
+              PopupNotification(notification, hide =>
+                setNotifications(ns =>
+                  ns.filter(existing => existing.id !== hide.id),
                 ),
               )
             }

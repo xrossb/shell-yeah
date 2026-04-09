@@ -1,14 +1,14 @@
-import Icon from "@/src/components/Icon"
-import Popup from "@/src/components/Popup"
-import * as search from "@/src/lib/search"
-import * as apps from "@/src/lib/search/apps"
-import * as bar from "@/src/windows/Bar"
 import { Accessor, createBinding, createEffect, createState } from "ags"
 import { Astal, Gdk, Gtk } from "ags/gtk4"
 import app from "ags/gtk4/app"
 import AstalNiri from "gi://AstalNiri?version=0.1"
 import Gio from "gi://Gio?version=2.0"
 import Pango from "gi://Pango?version=1.0"
+import Icon from "@/src/components/Icon"
+import Popup from "@/src/components/Popup"
+import * as search from "@/src/lib/search"
+import * as apps from "@/src/lib/search/apps"
+import * as bar from "@/src/windows/Bar"
 import createDebounce from "../lib/createDebounce"
 
 const name = "launcher"
@@ -52,7 +52,7 @@ export default function Launcher() {
     setMargin(newMargin)
 
     popup.gdkmonitor = app.monitors.find(
-      (monitor) => monitor.model === output.model,
+      monitor => monitor.model === output.model,
     )!
     entry.grab_focus()
   }
@@ -99,10 +99,10 @@ export default function Launcher() {
     scrollTo(prev)
   }
 
-  const resultsVisible = createBinding(resultStore, "nItems").as((n) => !!n)
+  const resultsVisible = createBinding(resultStore, "nItems").as(n => !!n)
 
   const searchDebounced = createDebounce(80, (query: string) => {
-    searchPlugins.search(query).then((results) => {
+    searchPlugins.search(query).then(results => {
       resultStore.splice(0, resultStore.nItems, results)
       if (resultStore.nItems) {
         const first = listbox.get_row_at_index(0)
@@ -126,7 +126,7 @@ export default function Launcher() {
       width={width}
       height={height}
       marginTop={margin}
-      $={(self) => (popup = self)}
+      $={self => (popup = self)}
       onNotifyVisible={() => placeWindow()}
     >
       <box orientation={Gtk.Orientation.VERTICAL} spacing={8}>
@@ -143,7 +143,7 @@ export default function Launcher() {
           }}
         />
         <entry
-          $={(self) => (entry = self)}
+          $={self => (entry = self)}
           placeholderText="type something..."
           heightRequest={50}
           onNotifyText={() => setQuery(entry.text)}
@@ -159,10 +159,10 @@ export default function Launcher() {
           <Gtk.ScrolledWindow
             propagateNaturalHeight
             hscrollbarPolicy={Gtk.PolicyType.NEVER}
-            $={(self) => (scroller = self)}
+            $={self => (scroller = self)}
           >
             <Gtk.ListBox
-              $={(self) => {
+              $={self => {
                 listbox = self
                 self.bind_model(resultStore, ListResult)
               }}

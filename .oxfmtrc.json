@@ -1,0 +1,9 @@
+{
+  "arrowParens": "avoid",
+  "jsdoc": {},
+  "printWidth": 80,
+  "semi": false,
+  "sortImports": {
+    "newlinesBetween": false
+  }
+}

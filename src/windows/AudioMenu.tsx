@@ -1,13 +1,13 @@
-import { Astal, Gtk } from "ags/gtk4"
-import Popup from "../components/Popup"
-import Icon from "../components/Icon"
 import { Accessor, createBinding, For, With } from "ags"
-import AstalWp from "gi://AstalWp?version=0.1"
-import AstalMpris from "gi://AstalMpris?version=0.1"
+import { Astal, Gtk } from "ags/gtk4"
 import Adw from "gi://Adw?version=1"
-import Gio from "gi://Gio?version=2.0"
 import AstalApps from "gi://AstalApps?version=0.1"
+import AstalMpris from "gi://AstalMpris?version=0.1"
+import AstalWp from "gi://AstalWp?version=0.1"
+import Gio from "gi://Gio?version=2.0"
 import Pango from "gi://Pango?version=1.0"
+import Icon from "../components/Icon"
+import Popup from "../components/Popup"
 
 const name = "audio-menu"
 
@@ -41,7 +41,7 @@ function DeviceControls() {
   return (
     <box orientation={Gtk.Orientation.VERTICAL} spacing={8}>
       <With value={speaker}>
-        {(speaker) => (
+        {speaker => (
           <DeviceSlider
             endpoint={speaker}
             icons={{ normal: "sy-volume-high", mute: "sy-volume-off" }}
@@ -49,7 +49,7 @@ function DeviceControls() {
         )}
       </With>
       <With value={microphone}>
-        {(microphone) => (
+        {microphone => (
           <DeviceSlider
             endpoint={microphone}
             icons={{ normal: "sy-mic", mute: "sy-mic-off" }}
@@ -76,7 +76,7 @@ function DeviceSlider({ endpoint, icons }: SliderProps) {
     <box>
       <button class="no-bg" onClicked={() => (endpoint.mute = !endpoint.mute)}>
         <image
-          iconName={mute.as((m) => (m ? icons?.mute : icons?.normal))}
+          iconName={mute.as(m => (m ? icons?.mute : icons?.normal))}
           pixelSize={20}
         />
       </button>
@@ -98,7 +98,7 @@ function PlayerList() {
   const mpris = AstalMpris.get_default()
   const players = createBinding(mpris, "players")
 
-  return <For each={players}>{(player) => <Player player={player} />}</For>
+  return <For each={players}>{player => <Player player={player} />}</For>
 }
 
 type PlayerProps = {
@@ -115,7 +115,7 @@ function Player({ player }: PlayerProps) {
 }
 
 function PlayerArt({ player }: PlayerProps) {
-  const coverArt = createBinding(player, "coverArt").as((c) =>
+  const coverArt = createBinding(player, "coverArt").as(c =>
     Gio.file_new_for_path(c),
   )
 
@@ -132,16 +132,14 @@ function PlayerArt({ player }: PlayerProps) {
 
 function PlayerContent({ player }: PlayerProps) {
   const apps = new AstalApps.Apps()
-  const title = createBinding(player, "title").as((t) => t || "Unknown Track")
-  const artist = createBinding(player, "artist").as(
-    (a) => a || "Unknown Artist",
-  )
-  const playIcon = createBinding(player, "playbackStatus").as((s) =>
+  const title = createBinding(player, "title").as(t => t || "Unknown Track")
+  const artist = createBinding(player, "artist").as(a => a || "Unknown Artist")
+  const playIcon = createBinding(player, "playbackStatus").as(s =>
     s === AstalMpris.PlaybackStatus.PLAYING
       ? "sy-player-pause"
       : "sy-player-play",
   )
-  const app = apps.list.find((a) => a.entry === player.entry)
+  const app = apps.list.find(a => a.entry === player.entry)
 
   return (
     <box
@@ -179,19 +177,19 @@ function PlayerContent({ player }: PlayerProps) {
       <box vexpand />
       <box>
         <box
-          visible={createBinding(player, "length").as((l) => l > 0)}
+          visible={createBinding(player, "length").as(l => l > 0)}
           valign={Gtk.Align.END}
         >
           <label
             cssClasses={["position"]}
-            label={createBinding(player, "position").as((l) =>
+            label={createBinding(player, "position").as(l =>
               l > 0 ? lengthStr(l) : "0:00",
             )}
           />
           <label label={" / "} />
           <label
             cssClasses={["length"]}
-            label={createBinding(player, "length").as((l) =>
+            label={createBinding(player, "length").as(l =>
               l > 0 ? lengthStr(l) : "0:00",
             )}
           />

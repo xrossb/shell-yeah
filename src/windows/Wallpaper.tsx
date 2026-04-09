@@ -1,7 +1,7 @@
-import { datadir } from "@/app"
-import Window from "@/src/components/Window"
 import { Astal, Gdk, Gtk } from "ags/gtk4"
 import Gio from "gi://Gio?version=2.0"
+import { datadir } from "@/app"
+import Window from "@/src/components/Window"
 
 const name = "wallpaper"
 

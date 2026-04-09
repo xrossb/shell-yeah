@@ -8,13 +8,13 @@ export type Props = {
 
 export default function Workspaces({ monitor }: Props) {
   const niri = AstalNiri.get_default()
-  const outputs = createBinding(niri, "outputs").as((outputs) =>
-    outputs.filter((output) => output.model === monitor.model),
+  const outputs = createBinding(niri, "outputs").as(outputs =>
+    outputs.filter(output => output.model === monitor.model),
   )
 
   return (
     <box name="workspaces">
-      <For each={outputs}>{(out) => <Output output={out} />}</For>
+      <For each={outputs}>{out => <Output output={out} />}</For>
     </box>
   )
 }
@@ -24,7 +24,7 @@ function Output(props: { output: AstalNiri.Output }) {
 
   return (
     <box class="output">
-      <For each={workspaces}>{(ws) => <Workspace workspace={ws} />}</For>
+      <For each={workspaces}>{ws => <Workspace workspace={ws} />}</For>
     </box>
   )
 }

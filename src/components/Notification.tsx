@@ -23,7 +23,7 @@ export default function Notification({ n, onDismiss }: Props) {
       />
       <Gtk.GestureClick
         button={Gdk.BUTTON_PRIMARY}
-        onReleased={() => n.actions.find((a) => a.id === "default")?.invoke()}
+        onReleased={() => n.actions.find(a => a.id === "default")?.invoke()}
       />
       <box orientation={VERTICAL} widthRequest={400} spacing={8}>
         <box spacing={8}>
@@ -67,7 +67,7 @@ function NotificationIcon(n: AstalNotifd.Notification) {
 function Header(n: AstalNotifd.Notification) {
   const time = GLib.DateTime.new_from_unix_local(n.time).format("%I:%M %P")
   const summary = n.summary.replace(n.appName, "")
-  const parts = [time, n.appName, summary].filter((x) => x)
+  const parts = [time, n.appName, summary].filter(x => x)
   return (
     <label
       class="header"
@@ -93,10 +93,10 @@ function TextContent(n: AstalNotifd.Notification) {
 }
 
 function Actions(n: AstalNotifd.Notification) {
-  const actions = n.actions.filter((action) => action.id !== "default")
+  const actions = n.actions.filter(action => action.id !== "default")
   return (
     <box class="actions" visible={!!actions.length} spacing={8} homogeneous>
-      {actions.map((action) => (
+      {actions.map(action => (
         <button onClicked={() => action.invoke()}>
           <label label={action.label} />
         </button>
