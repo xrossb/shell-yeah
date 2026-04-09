@@ -6,8 +6,8 @@ import AstalNotifd from "gi://AstalNotifd?version=0.1"
 import GLib from "gi://GLib?version=2.0"
 import BarItem from "@/src/components/BarItem"
 import Icon from "@/src/components/Icon"
+import { config } from "@/src/lib/options"
 
-const format = "%a, %d %b · %I:%M %P"
 const icons = {
   off: "sy-notifications-off",
   unread: "sy-notifications-unread",
@@ -25,7 +25,7 @@ export default function Clock() {
   const time = createPoll(
     "",
     1000,
-    () => GLib.DateTime.new_now_local().format(format) || "",
+    () => GLib.DateTime.new_now_local().format(config.clock.format) || "",
   )
 
   return (
