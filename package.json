@@ -1,10 +1,25 @@
 {
-  "dependencies": {
-    "ags": "github:Aylur/ags",
-    "gnim": "github:Aylur/gnim",
-    "gnofi": "github:Aylur/gnofi"
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^6.0.2",
+    "prettier": "^3.8.1",
+    "typescript": "^6.0.2"
   },
   "prettier": {
+    "plugins": [
+      "@trivago/prettier-plugin-sort-imports"
+    ],
+    "importOrder": [
+      "<BUILTIN_MODULES>",
+      "<THIRD_PARTY_MODULES>",
+      "^@",
+      "^[./]"
+    ],
+    "importOrderParserPlugins": [
+      "decorators",
+      "jsx",
+      "typescript"
+    ],
+    "importOrderSortSpecifiers": true,
     "semi": false,
     "tabWidth": 2
   }

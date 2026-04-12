@@ -1,0 +1,26 @@
+@use "vars";
+
+#launcher {
+  entry {
+    font-size: 18px;
+    background-color: transparent;
+    outline: none;
+    border-style: none;
+    border-radius: 8px;
+  }
+
+  list > * {
+    padding: 8px;
+    padding-left: 12px;
+    border-radius: 8px;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  .description {
+    font-size: 14px;
+    color: vars.$base04;
+  }
+}

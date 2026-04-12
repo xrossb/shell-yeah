@@ -1,72 +1,49 @@
+import { Accessor } from "ags"
 import { Astal, Gdk, Gtk } from "ags/gtk4"
-import { createState } from "ags"
-import app from "ags/gtk4/app"
+import Adw from "gi://Adw?version=1"
+import GLib from "gi://GLib?version=2.0"
+import Window from "@/src/components/Window"
+import { PropsFor } from "@/src/lib/types"
 
-const handles: Gtk.Window[] = []
-
-export type PopupProps = {
-  children: JSX.Element
-  name: string
-  gdkmonitor?: Gdk.Monitor
-  anchor?: Astal.WindowAnchor
-  transitionType?: Gtk.RevealerTransitionType
-  transitionDuration?: number
-  $?: (self: Astal.Window) => void
+export type Props = PropsFor<typeof Window> & {
+  width?: number | Accessor<number>
+  height?: number | Accessor<number>
 }
 
-export default function Popup(props: PopupProps) {
-  const [visible, setVisible] = createState(false)
-  const [revealed, setRevealed] = createState(false)
-
-  let content: Gtk.Widget
-
-  function show() {
-    handles.forEach((h) => h.hide())
-    setVisible(true)
-    setRevealed(true)
-  }
-
-  function hide() {
-    setRevealed(false)
-  }
-
+export default function Popup({ width, height, children, ...props }: Props) {
   return (
-    <window
-      application={app}
-      visible={visible}
-      name={props.name}
-      namespace={props.name}
+    <Window
+      class="popup"
       keymode={Astal.Keymode.ON_DEMAND}
       layer={Astal.Layer.OVERLAY}
-      gdkmonitor={props.gdkmonitor}
-      anchor={props.anchor}
-      onNotifyVisible={(self) => {
-        if (self.visible) self.grab_focus()
-      }}
-      $={(self) => {
-        Object.assign(self, { show, hide })
-        handles.push(self)
-        if (props.$) props.$(self)
-      }}
       resizable={false}
-      onNotifyIsActive={(self) => setRevealed(self.isActive)}
+      onNotifyVisible={(w) => {
+        if (w.visible) w.grab_focus()
+      }}
+      onNotifyIsActive={(self) => {
+        if (self.isActive) return
+        // While opening/closing popovers, the window briefly becomes inactive.
+        // Deferring this check until idle ensures this property has settled.
+        GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+          if (!self.isActive) self.hide()
+          return GLib.SOURCE_REMOVE
+        })
+      }}
+      {...props}
     >
       <Gtk.EventControllerKey
         onKeyPressed={(self, keyval: number) => {
           if (keyval === Gdk.KEY_Escape) self.widget.hide()
         }}
       />
-      <revealer
-        revealChild={revealed}
-        transitionType={props.transitionType}
-        transitionDuration={props.transitionDuration}
-        onNotifyChildRevealed={(self) => {
-          setVisible(self.childRevealed)
-        }}
-        $={(self) => (content = self)}
+      <Adw.Clamp
+        widthRequest={width}
+        maximumSize={height}
+        tighteningThreshold={height}
+        orientation={Gtk.Orientation.VERTICAL}
       >
-        {props.children}
-      </revealer>
-    </window>
-  ) as Astal.Window
+        {children}
+      </Adw.Clamp>
+    </Window>
+  )
 }
