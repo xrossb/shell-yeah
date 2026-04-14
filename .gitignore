@@ -1,10 +1,8 @@
 # tools
 .direnv
-.vscode
-
-# node
-node_modules
-@girs
 
 # nix
 result
+
+# cargo
+/target

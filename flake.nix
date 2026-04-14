@@ -4,94 +4,50 @@
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-
-    astal = {
-      url = "github:aylur/astal";
+    naersk = {
+      url = "github:nix-community/naersk";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-    astal-niri = {
-      url = "github:sameoldlab/astal?ref=feat/niri";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    ags = {
-      url = "github:aylur/ags";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.astal.follows = "astal";
     };
   };
 
-  outputs = inputs @ {flake-parts, ...}:
-    flake-parts.lib.mkFlake {inherit inputs;} {
-      imports = [
-        ./nix/shell.nix
-        ./nix/package.nix
-      ];
+  outputs = inputs:
+    inputs.flake-parts.lib.mkFlake {inherit inputs;} {
       systems = [
         "x86_64-linux"
       ];
-      perSystem = {pkgs, ...}: {
+      perSystem = {pkgs, ...}: let
+        naersk = pkgs.callPackage inputs.naersk {};
+        buildInputs = with pkgs; [
+          gtk4
+          gtk4-layer-shell
+        ];
+        nativeBuildInputs = with pkgs; [
+          pkg-config
+        ];
+      in {
         formatter = pkgs.alejandra;
+
+        packages = rec {
+          default = shell-yeah;
+          shell-yeah = naersk.buildPackage {
+            inherit buildInputs nativeBuildInputs;
+            src = ./.;
+          };
+        };
+
+        devShells.default = pkgs.mkShell {
+          inherit buildInputs;
+          nativeBuildInputs = with pkgs;
+            nativeBuildInputs
+            ++ [
+              cargo
+              clippy
+              rustc
+              rustfmt
+              rust-analyzer
+            ];
+          RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
+        };
       };
     };
-
-  # outputs = {
-  #   self,
-  #   nixpkgs,
-  #   ags,
-  # }: let
-  #   system = "x86_64-linux";
-  #   pkgs = nixpkgs.legacyPackages.${system};
-  #   pname = "my-shell";
-  #   entry = "app.ts";
-
-  #   astalPackages = with ags.packages.${system}; [
-  #     io
-  #     astal4 # or astal3 for gtk3
-  #     # notifd tray wireplumber
-  #   ];
-
-  #   extraPackages =
-  #     astalPackages
-  #     ++ [
-  #       pkgs.libadwaita
-  #       pkgs.libsoup_3
-  #     ];
-  # in {
-  #   packages.${system} = {
-  #     default = pkgs.stdenv.mkDerivation {
-  #       name = pname;
-  #       src = ./.;
-
-  #       nativeBuildInputs = with pkgs; [
-  #         wrapGAppsHook3
-  #         gobject-introspection
-  #         ags.packages.${system}.default
-  #       ];
-
-  #       buildInputs = extraPackages ++ [pkgs.gjs];
-
-  #       installPhase = ''
-  #         runHook preInstall
-
-  #         mkdir -p $out/bin
-  #         mkdir -p $out/share
-  #         cp -r * $out/share
-  #         ags bundle ${entry} $out/bin/${pname} -d "SRC='$out/share'"
-
-  #         runHook postInstall
-  #       '';
-  #     };
-  #   };
-
-  #   devShells.${system} = {
-  #     default = pkgs.mkShell {
-  #       buildInputs = [
-  #         (ags.packages.${system}.default.override {
-  #           inherit extraPackages;
-  #         })
-  #       ];
-  #     };
-  #   };
-  # };
 }
