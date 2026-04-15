@@ -20,6 +20,7 @@
         buildInputs = with pkgs; [
           gtk4
           gtk4-layer-shell
+          jetbrains-mono
         ];
         nativeBuildInputs = with pkgs; [
           pkg-config
@@ -40,6 +41,7 @@
           nativeBuildInputs = with pkgs;
             nativeBuildInputs
             ++ [
+              bacon
               cargo
               clippy
               rustc

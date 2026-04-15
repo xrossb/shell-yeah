@@ -29,7 +29,7 @@ impl SimpleComponent for Model {
         root.init_layer_shell();
 
         let bar = bar::Model::builder()
-            .launch(bar::Init::default())
+            .launch(())
             .forward(sender.input_sender(), |msg| msg);
 
         let model = Model { bar };

@@ -1,44 +1,26 @@
-use std::time::Duration;
-
 use gtk4_layer_shell::{Edge, Layer, LayerShell};
-use relm4::gtk::glib::{self, ControlFlow, DateTime};
 use relm4::gtk::prelude::*;
 use relm4::prelude::*;
 
+use crate::widgets::baritems::clock;
+
+const NAME: &str = "bar";
+
 #[derive(Debug)]
 pub struct Model {
-    format: String,
-    time: String,
-}
-
-#[derive(Debug)]
-pub struct Init {
-    format: String,
-}
-
-impl Default for Init {
-    fn default() -> Self {
-        Self {
-            format: "%a, %d %b · %I:%M %P".to_string(),
-        }
-    }
-}
-
-#[derive(Debug)]
-pub enum Msg {
-    Tick,
+    clock: Controller<clock::Model>,
 }
 
 #[relm4::component(pub)]
 impl SimpleComponent for Model {
-    type Init = Init;
-    type Input = Msg;
+    type Init = ();
+    type Input = ();
     type Output = ();
 
     view! {
-        #[root]
         gtk::Window {
-            set_namespace: Some("bar"),
+            set_widget_name: NAME,
+            set_namespace: Some(NAME),
             set_visible: true,
             set_layer: Layer::Top,
             set_anchor[true]: Edge::Top,
@@ -49,47 +31,27 @@ impl SimpleComponent for Model {
             gtk::CenterBox {
                 #[wrap(Some)]
                 set_center_widget = &gtk::Box {
-                    gtk::Label {
-                        #[watch]
-                        set_label: &model.time,
-                    },
+                    model.clock.widget(),
                 },
             },
         },
     }
 
     fn init(
-        init: Self::Init,
+        _init: Self::Init,
         root: Self::Root,
-        sender: ComponentSender<Self>,
+        _sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
         root.init_layer_shell();
         root.auto_exclusive_zone_enable();
 
-        glib::timeout_add_local(Duration::from_secs(1), move || {
-            sender.input(Msg::Tick);
-            ControlFlow::Continue
-        });
+        let clock = clock::Model::builder()
+            .launch(clock::Init::default())
+            .detach();
 
-        let model = Model {
-            time: current_time(&init.format),
-            format: init.format,
-        };
+        let model = Model { clock };
         let widgets = view_output!();
 
         ComponentParts { model, widgets }
     }
-
-    fn update(&mut self, message: Self::Input, _sender: ComponentSender<Self>) {
-        match message {
-            Msg::Tick => self.time = current_time(&self.format),
-        }
-    }
-}
-
-fn current_time(format: &str) -> String {
-    DateTime::now_local()
-        .and_then(|now| now.format(format))
-        .map(|gstr| gstr.to_string())
-        .unwrap_or(String::new())
 }

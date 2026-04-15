@@ -6,3 +6,4 @@ edition = "2024"
 [dependencies]
 gtk4-layer-shell = "0.8.0"
 relm4 = "0.11.0"
+rust-embed = "8.11.0"
