@@ -68,5 +68,5 @@ fn current_time(format: &str) -> String {
     DateTime::now_local()
         .and_then(|now| now.format(format))
         .map(|gstr| gstr.to_string())
-        .unwrap_or(String::new())
+        .unwrap_or_default()
 }
