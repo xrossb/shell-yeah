@@ -34,7 +34,6 @@ impl SimpleComponent for Model {
             set_anchor[true]: Edge::Top,
             set_anchor[true]: Edge::Left,
             set_anchor[true]: Edge::Right,
-            set_default_height: 30,
 
             gtk::CenterBox {
                 #[wrap(Some)]

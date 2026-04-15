@@ -4,7 +4,7 @@ use relm4::{gtk::prelude::*, prelude::*};
 use crate::modules::bar;
 
 pub struct Model {
-    bar: Controller<bar::Model>,
+    _bar: Controller<bar::Model>,
 }
 
 #[relm4::component(pub)]
@@ -32,7 +32,7 @@ impl SimpleComponent for Model {
             .launch(())
             .forward(sender.input_sender(), |msg| msg);
 
-        let model = Model { bar };
+        let model = Model { _bar: bar };
         let widgets = view_output!();
 
         ComponentParts { model, widgets }

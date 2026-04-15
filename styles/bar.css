@@ -1,3 +1,9 @@
 window#bar {
   font-weight: bold;
+  color: #e6e1cf;
+  background-color: #131721;
+}
+
+#bar .icon {
+  padding: 6px;
 }

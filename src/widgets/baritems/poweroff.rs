@@ -1,4 +1,4 @@
-use relm4::prelude::*;
+use relm4::{gtk::prelude::WidgetExt, prelude::*};
 
 pub struct Model;
 
@@ -9,8 +9,10 @@ impl SimpleComponent for Model {
     type Output = ();
 
     view! {
-        gtk::Label {
-            set_label: "poweroff",
+        gtk::Image {
+            add_css_class: "icon",
+            set_icon_name: Some("power"),
+            set_pixel_size: 20,
         },
     }
 

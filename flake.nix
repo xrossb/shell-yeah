@@ -23,6 +23,7 @@
           jetbrains-mono
         ];
         nativeBuildInputs = with pkgs; [
+          makeWrapper
           pkg-config
         ];
       in {
@@ -30,9 +31,16 @@
 
         packages = rec {
           default = shell-yeah;
-          shell-yeah = naersk.buildPackage {
+          shell-yeah = naersk.buildPackage rec {
             inherit buildInputs nativeBuildInputs;
+            name = "shell-yeah";
             src = ./.;
+            postInstall = ''
+              mkdir -p $out/share/${name}
+              cp -r assets/* $out/share/${name}
+              wrapProgram $out/bin/${name} \
+                --set SY_ASSETS $out/share/${name}
+            '';
           };
         };
 
