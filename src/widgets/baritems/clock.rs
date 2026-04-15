@@ -1,16 +1,13 @@
 use std::time::Duration;
 
 use relm4::gtk::glib::{self, ControlFlow, DateTime};
-use relm4::gtk::prelude::*;
 use relm4::prelude::*;
 
-#[derive(Debug, Default)]
 pub struct Model {
     format: String,
     time: String,
 }
 
-#[derive(Debug)]
 pub struct Init {
     format: String,
 }
@@ -35,7 +32,6 @@ impl SimpleComponent for Model {
     type Output = ();
 
     view! {
-        #[root]
         gtk::Label {
             #[watch]
             set_label: &model.time,
