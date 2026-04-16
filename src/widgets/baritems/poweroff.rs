@@ -1,4 +1,5 @@
-use relm4::{gtk::prelude::WidgetExt, prelude::*};
+use relm4::gtk::prelude::*;
+use relm4::prelude::*;
 
 pub struct Model;
 
@@ -10,9 +11,8 @@ impl SimpleComponent for Model {
 
     view! {
         gtk::Image {
-            add_css_class: "icon",
+            add_css_class: "item",
             set_icon_name: Some("power"),
-            set_pixel_size: 20,
         },
     }
 

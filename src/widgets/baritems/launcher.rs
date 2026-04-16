@@ -1,3 +1,4 @@
+use relm4::gtk::prelude::*;
 use relm4::prelude::*;
 
 pub struct Model;
@@ -9,8 +10,9 @@ impl SimpleComponent for Model {
     type Output = ();
 
     view! {
-        gtk::Label {
-            set_label: "launcher",
+        gtk::Image {
+            add_css_class: "item",
+            set_icon_name: Some("magnifying-glass"),
         },
     }
 

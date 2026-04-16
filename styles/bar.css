@@ -1,9 +1,14 @@
 window#bar {
+  font-size: 14px;
   font-weight: bold;
   color: #e6e1cf;
   background-color: #131721;
 }
 
-#bar .icon {
+#bar .item {
   padding: 6px;
+}
+
+#bar #battery {
+  font-size: 12px;
 }

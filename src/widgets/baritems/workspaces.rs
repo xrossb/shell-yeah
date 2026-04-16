@@ -1,3 +1,4 @@
+use relm4::gtk::prelude::*;
 use relm4::prelude::*;
 
 pub struct Model;
@@ -10,6 +11,7 @@ impl SimpleComponent for Model {
 
     view! {
         gtk::Label {
+            add_css_class: "item",
             set_label: "workspaces",
         },
     }

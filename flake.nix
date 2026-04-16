@@ -20,11 +20,11 @@
         buildInputs = with pkgs; [
           gtk4
           gtk4-layer-shell
-          jetbrains-mono
         ];
         nativeBuildInputs = with pkgs; [
           makeWrapper
           pkg-config
+          jetbrains-mono
         ];
       in {
         formatter = pkgs.alejandra;

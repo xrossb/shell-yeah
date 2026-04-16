@@ -1,3 +1,4 @@
+use relm4::gtk::prelude::*;
 use relm4::prelude::*;
 
 pub struct Model;
@@ -9,8 +10,18 @@ impl SimpleComponent for Model {
     type Output = ();
 
     view! {
-        gtk::Label {
-            set_label: "battery",
+        gtk::Box {
+            set_widget_name: "battery",
+            add_css_class: "item",
+            set_spacing: 6,
+
+            gtk::Image {
+                set_icon_name: Some("battery-full"),
+            },
+            gtk::Label {
+                set_label: "100%",
+                set_valign: gtk::Align::Center,
+            },
         },
     }
 
