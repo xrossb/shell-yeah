@@ -12,7 +12,7 @@ impl SimpleComponent for Model {
     view! {
         gtk::Image {
             add_css_class: "item",
-            set_icon_name: Some("power"),
+            set_icon_name: Some("sy-power"),
         },
     }
 

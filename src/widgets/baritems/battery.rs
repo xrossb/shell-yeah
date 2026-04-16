@@ -16,7 +16,7 @@ impl SimpleComponent for Model {
             set_spacing: 6,
 
             gtk::Image {
-                set_icon_name: Some("battery-full"),
+                set_icon_name: Some("sy-battery-full"),
             },
             gtk::Label {
                 set_label: "100%",

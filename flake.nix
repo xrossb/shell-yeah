@@ -39,7 +39,7 @@
               mkdir -p $out/share/${name}
               cp -r assets/* $out/share/${name}
               wrapProgram $out/bin/${name} \
-                --set SY_ASSETS $out/share/${name}
+                --set DATADIR $out/share/${name}
             '';
           };
         };

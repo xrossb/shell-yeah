@@ -36,12 +36,8 @@ fn setup_icons() {
     let home = std::env::home_dir().unwrap();
     theme.add_search_path(home.join(".config/shell-yeah/icons"));
 
-    let datadir = std::env::var("SY_ASSETS")
+    let datadir = std::env::var("DATADIR")
         .map(PathBuf::from)
         .unwrap_or("./assets".into());
     theme.add_search_path(datadir.join("icons"));
-
-    gtk::Settings::default()
-        .unwrap()
-        .set_gtk_icon_theme_name(Some("SyPhosphor"));
 }

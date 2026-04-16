@@ -15,10 +15,10 @@ impl SimpleComponent for Model {
             set_spacing: 6,
 
             gtk::Image {
-                set_icon_name: Some("wifi-high"),
+                set_icon_name: Some("sy-wifi-strong"),
             },
             gtk::Image {
-                set_icon_name: Some("network"),
+                set_icon_name: Some("sy-lan"),
             },
         },
     }
