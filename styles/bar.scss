@@ -1,0 +1,45 @@
+window#bar {
+  font-size: 14px;
+  font-weight: bold;
+  color: #e6e1cf;
+  background-color: #131721;
+  min-height: 30px;
+}
+
+#bar {
+  .item {
+    padding-left: 8px;
+    padding-right: 8px;
+
+    &:hover {
+      background-color: #e6e1cf30;
+    }
+  }
+
+  .workspace {
+    padding-left: 10px;
+    padding-right: 10px;
+
+    label {
+      min-width: 8px;
+      min-height: 8px;
+    }
+
+    &.active > label {
+      font-size: 0;
+      background-color: #e6e1cf;
+    }
+
+    &.empty > label {
+      color: #e6e1cf80;
+    }
+
+    &.urgent > label {
+      color: #ff8f40;
+    }
+  }
+
+  #battery {
+    font-size: 12px;
+  }
+}

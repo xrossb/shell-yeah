@@ -25,7 +25,9 @@ fn setup_styles() {
 
     for filename in Styles::iter() {
         let file = Styles::get(&filename).expect("embedded style does not exist");
-        let style = str::from_utf8(&file.data).expect("embedded style is not utf-8");
+        let style = rsass::compile_scss(&file.data, Default::default())
+            .expect("error compiling stylesheet");
+        let style = str::from_utf8(&style).expect("embedded style is not utf-8");
         relm4::set_global_css(style);
     }
 }
