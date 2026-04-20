@@ -44,7 +44,7 @@ impl SimpleComponent for Model {
                 let mut guard = self.workspaces.guard();
                 guard.clear();
                 for ws in workspaces {
-                    guard.push_back(WorkspaceInit {
+                    guard.push_back(Workspace {
                         id: ws.id,
                         idx: ws.idx,
                         is_active: ws.is_active,
@@ -73,16 +73,7 @@ impl SimpleComponent for Model {
     }
 }
 
-#[derive(Clone)]
 struct Workspace {
-    id: u64,
-    idx: u8,
-    is_active: bool,
-    is_empty: bool,
-    is_urgent: bool,
-}
-
-struct WorkspaceInit {
     id: u64,
     idx: u8,
     is_active: bool,
@@ -108,7 +99,7 @@ enum WorkspaceMsg {
 
 #[relm4::factory]
 impl FactoryComponent for Workspace {
-    type Init = WorkspaceInit;
+    type Init = Workspace;
     type Input = WorkspaceMsg;
     type Output = NiriCmd;
     type CommandOutput = ();
