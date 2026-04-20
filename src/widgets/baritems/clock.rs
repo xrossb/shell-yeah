@@ -16,7 +16,7 @@ pub struct Init {
 impl Default for Init {
     fn default() -> Self {
         Self {
-            format: "%a, %d %b · %I:%M %P".to_string(),
+            format: "%a, %d %b · %-l:%M %P".to_string(),
         }
     }
 }
@@ -33,10 +33,14 @@ impl SimpleComponent for Model {
     type Output = ();
 
     view! {
-        gtk::Label {
+        gtk::Box {
             add_css_class: "item",
-            #[watch]
-            set_label: &model.time,
+
+            gtk::Label {
+                #[watch]
+                set_label: &model.time,
+                set_valign: gtk::Align::BaselineCenter,
+            },
         },
     }
 

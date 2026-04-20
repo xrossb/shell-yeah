@@ -7,6 +7,7 @@ use rust_embed::Embed;
 mod modules;
 mod shell;
 mod widgets;
+mod workers;
 
 fn main() {
     let app = RelmApp::new("shell-yeah.main");

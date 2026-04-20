@@ -2,8 +2,12 @@ use gtk4_layer_shell::{Edge, Layer, LayerShell};
 use relm4::gtk::prelude::*;
 use relm4::prelude::*;
 
-use crate::widgets::baritems::{
-    audio, battery, bluetooth, clock, launcher, network, poweroff, workspaces,
+use crate::{
+    shell,
+    widgets::baritems::{
+        audio, battery, bluetooth, clock, launcher, network, poweroff, workspaces,
+    },
+    workers::niri::NiriCmd,
 };
 
 const NAME: &str = "bar";
@@ -19,11 +23,16 @@ pub struct Model {
     workspaces: Controller<workspaces::Model>,
 }
 
+#[derive(Clone, Debug)]
+pub enum Output {
+    WorkspacesEvent(NiriCmd),
+}
+
 #[relm4::component(pub)]
 impl SimpleComponent for Model {
     type Init = ();
-    type Input = ();
-    type Output = ();
+    type Input = shell::Msg;
+    type Output = Output;
 
     view! {
         gtk::Window {
@@ -62,7 +71,7 @@ impl SimpleComponent for Model {
     fn init(
         _init: Self::Init,
         root: Self::Root,
-        _sender: ComponentSender<Self>,
+        sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
         root.init_layer_shell();
         root.auto_exclusive_zone_enable();
@@ -83,7 +92,9 @@ impl SimpleComponent for Model {
 
         let poweroff = poweroff::Model::builder().launch(()).detach();
 
-        let workspaces = workspaces::Model::builder().launch(()).detach();
+        let workspaces = workspaces::Model::builder()
+            .launch(())
+            .forward(sender.output_sender(), |msg| Output::WorkspacesEvent(msg));
 
         let model = Model {
             audio,
@@ -98,5 +109,11 @@ impl SimpleComponent for Model {
         let widgets = view_output!();
 
         ComponentParts { model, widgets }
+    }
+
+    fn update(&mut self, msg: Self::Input, _: ComponentSender<Self>) {
+        if let shell::Msg::NiriEvent(event) = msg {
+            self.workspaces.sender().send(event).unwrap();
+        }
     }
 }

@@ -20,7 +20,6 @@ impl SimpleComponent for Model {
             },
             gtk::Label {
                 set_label: "100%",
-                set_valign: gtk::Align::Center,
             },
         },
     }
