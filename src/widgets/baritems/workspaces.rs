@@ -41,9 +41,10 @@ impl SimpleComponent for Model {
         match msg {
             NiriMsg::WorkspacesChanged { mut workspaces } => {
                 workspaces.sort_by(|a, b| a.idx.cmp(&b.idx));
-                self.workspaces.guard().clear();
+                let mut guard = self.workspaces.guard();
+                guard.clear();
                 for ws in workspaces {
-                    self.workspaces.guard().push_back(WorkspaceInit {
+                    guard.push_back(WorkspaceInit {
                         id: ws.id,
                         idx: ws.idx,
                         is_active: ws.is_active,
