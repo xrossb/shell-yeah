@@ -94,7 +94,7 @@ impl SimpleComponent for Model {
 
         let workspaces = workspaces::Model::builder()
             .launch(())
-            .forward(sender.output_sender(), |msg| Output::WorkspacesEvent(msg));
+            .forward(sender.output_sender(), Output::WorkspacesEvent);
 
         let model = Model {
             audio,

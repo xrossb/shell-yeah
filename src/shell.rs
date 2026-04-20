@@ -41,11 +41,11 @@ impl SimpleComponent for Model {
 
         let niri = NiriWorker::builder()
             .launch(())
-            .forward(sender.input_sender(), |msg| Msg::NiriEvent(msg));
+            .forward(sender.input_sender(), Msg::NiriEvent);
 
         let bar = bar::Model::builder()
             .launch(())
-            .forward(sender.input_sender(), |msg| Msg::BarEvent(msg));
+            .forward(sender.input_sender(), Msg::BarEvent);
 
         let model = Model { niri, bar };
         let widgets = view_output!();
