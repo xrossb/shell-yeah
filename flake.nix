@@ -20,6 +20,7 @@
         buildInputs = with pkgs; [
           gtk4
           gtk4-layer-shell
+          libadwaita
         ];
         nativeBuildInputs = with pkgs; [
           makeWrapper
