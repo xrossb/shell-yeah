@@ -5,19 +5,20 @@ use relm4::prelude::*;
 use crate::{
     modules::bar,
     workers::{
-        battery::BatteryWorker,
+        battery::{BatteryMsg, BatteryWorker},
         niri::{NiriMsg, NiriWorker},
     },
 };
 
 pub struct Model {
-    _battery: Controller<BatteryWorker>,
+    battery: Controller<BatteryWorker>,
     niri: Controller<NiriWorker>,
     bar: Controller<bar::Model>,
 }
 
 #[derive(Clone, Debug)]
 pub enum Msg {
+    BatteryMsg(BatteryMsg),
     NiriEvent(NiriMsg),
     BarEvent(bar::Output),
 }
@@ -43,7 +44,9 @@ impl SimpleComponent for Model {
     ) -> ComponentParts<Self> {
         root.init_layer_shell();
 
-        let battery = BatteryWorker::builder().launch(()).detach();
+        let battery = BatteryWorker::builder()
+            .launch(())
+            .forward(sender.input_sender(), Msg::BatteryMsg);
         let niri = NiriWorker::builder()
             .launch(())
             .forward(sender.input_sender(), Msg::NiriEvent);
@@ -52,11 +55,7 @@ impl SimpleComponent for Model {
             .launch(())
             .forward(sender.input_sender(), Msg::BarEvent);
 
-        let model = Model {
-            _battery: battery,
-            niri,
-            bar,
-        };
+        let model = Model { battery, niri, bar };
         let widgets = view_output!();
 
         ComponentParts { model, widgets }

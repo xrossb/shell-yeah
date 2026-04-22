@@ -16,7 +16,7 @@ pub struct BatteryWorker {
     ct: CancellationToken,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum BatteryMsg {
     PercentageChanged(f64),
     IsPresentChanged(bool),

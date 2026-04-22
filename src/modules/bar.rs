@@ -112,8 +112,10 @@ impl SimpleComponent for Model {
     }
 
     fn update(&mut self, msg: Self::Input, _: ComponentSender<Self>) {
-        if let shell::Msg::NiriEvent(event) = msg {
-            self.workspaces.sender().send(event).unwrap();
+        match msg {
+            shell::Msg::NiriEvent(event) => self.workspaces.sender().send(event).unwrap(),
+            shell::Msg::BatteryMsg(msg) => self.battery.sender().send(msg).unwrap(),
+            _ => (),
         }
     }
 }
