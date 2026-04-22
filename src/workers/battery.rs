@@ -19,6 +19,7 @@ pub struct BatteryWorker {
 #[derive(Debug)]
 pub enum BatteryMsg {
     PercentageChanged(f64),
+    IsPresentChanged(bool),
 }
 
 impl Worker for BatteryWorker {
@@ -48,13 +49,19 @@ impl Worker for BatteryWorker {
             };
 
             let mut percentage_changed = device.receive_percentage_changed().await;
+            let mut is_present_changed = device.receive_is_present_changed().await;
             loop {
                 select! {
                     _ = inner_ct.cancelled() => break,
-                    Some(res) = percentage_changed.next() => forward(
-                        res,
+                    Some(prop) = percentage_changed.next() => forward(
+                        prop,
                         &sender,
                         BatteryMsg::PercentageChanged,
+                    ).await,
+                    Some(prop) = is_present_changed.next() => forward(
+                        prop,
+                        &sender,
+                        BatteryMsg::IsPresentChanged,
                     ).await,
                 };
             }
