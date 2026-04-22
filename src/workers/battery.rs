@@ -1,12 +1,14 @@
 use std::fmt::Debug;
 
-use relm4::Worker;
+use relm4::{ComponentSender, Worker};
 use serde_repr::{Deserialize_repr, Serialize_repr};
 use tokio::select;
 use tokio_stream::StreamExt;
 use tokio_util::sync::CancellationToken;
+use zbus::proxy;
 use zbus::{
-    Connection, fdo, proxy,
+    Connection, fdo,
+    proxy::PropertyChanged,
     zvariant::{OwnedValue, Type},
 };
 
@@ -45,24 +47,15 @@ impl Worker for BatteryWorker {
                 }
             };
 
+            let mut percentage_changed = device.receive_percentage_changed().await;
             loop {
-                let mut percentage_changed = device.receive_percentage_changed().await;
                 select! {
                     _ = inner_ct.cancelled() => break,
-                    Some(res) = percentage_changed.next() => {
-                        let percentage = match res.get().await {
-                            Ok(percentage) => percentage,
-                            Err(err) => {
-                                log::warn!("cannot get current percentage: {err}");
-                                continue;
-                            }
-                        };
-                        if !sender.output(BatteryMsg::PercentageChanged(percentage)).is_ok() {
-                            log::warn!("error sending message");
-                            continue;
-                        }
-                        log::info!("percentage changed: {percentage}");
-                    },
+                    Some(res) = percentage_changed.next() => forward(
+                        res,
+                        &sender,
+                        BatteryMsg::PercentageChanged,
+                    ).await,
                 };
             }
         });
@@ -71,6 +64,28 @@ impl Worker for BatteryWorker {
     }
 
     fn update(&mut self, _: Self::Input, _: relm4::ComponentSender<Self>) {}
+}
+
+async fn forward<P: TryFrom<OwnedValue> + Debug, F: FnOnce(P) -> BatteryMsg>(
+    change: PropertyChanged<'_, P>,
+    sender: &ComponentSender<BatteryWorker>,
+    map: F,
+) where
+    P::Error: Into<zbus::Error>,
+{
+    let value = match change.get().await {
+        Ok(v) => v,
+        Err(err) => {
+            log::warn!("cannot get {}: {}", change.name(), err);
+            return;
+        }
+    };
+
+    log::debug!("{} changed: {:?}", change.name(), value);
+    let msg = map(value);
+    sender
+        .output(msg)
+        .unwrap_or_else(|_| log::warn!("cannot send message"));
 }
 
 #[proxy(
