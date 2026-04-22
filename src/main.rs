@@ -10,6 +10,9 @@ mod widgets;
 mod workers;
 
 fn main() {
+    env_logger::Builder::from_env("LOG_LEVEL").init();
+    log::info!("hello from shell-yeah");
+
     let app = RelmApp::new("shell-yeah.main");
 
     setup_icons();
