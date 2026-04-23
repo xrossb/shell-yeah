@@ -63,7 +63,7 @@ impl SimpleComponent for ClockItem {
         ComponentParts { model, widgets }
     }
 
-    fn update(&mut self, message: Self::Input, _sender: ComponentSender<Self>) {
+    fn update(&mut self, message: Self::Input, _: ComponentSender<Self>) {
         match message {
             ClockCmd::Tick => self.time = current_time(&self.format),
         }

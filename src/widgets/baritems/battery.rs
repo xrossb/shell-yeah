@@ -33,7 +33,7 @@ impl SimpleComponent for BatteryItem {
     }
 
     fn init(
-        _init: Self::Init,
+        _: Self::Init,
         root: Self::Root,
         _sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
@@ -48,8 +48,12 @@ impl SimpleComponent for BatteryItem {
 
     fn update(&mut self, msg: Self::Input, _: ComponentSender<Self>) {
         match msg {
-            BatteryMsg::PercentageChanged(percentage) => self.percentage = percentage,
-            BatteryMsg::IsPresentChanged(is_present) => self.is_present = is_present,
+            BatteryMsg::PercentageChanged(percentage) => {
+                self.percentage = percentage
+            }
+            BatteryMsg::IsPresentChanged(is_present) => {
+                self.is_present = is_present
+            }
         }
     }
 }

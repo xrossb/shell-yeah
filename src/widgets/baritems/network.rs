@@ -24,7 +24,7 @@ impl SimpleComponent for NetworkItem {
     }
 
     fn init(
-        _init: Self::Init,
+        _: Self::Init,
         root: Self::Root,
         _sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {

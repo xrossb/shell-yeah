@@ -1,6 +1,7 @@
 use relm4::gtk::{gdk, prelude::*};
 use relm4::prelude::*;
 
+use crate::util::ResultExt;
 use crate::workers::{NiriCmd, NiriMsg};
 
 pub struct WorkspacesItem {
@@ -21,7 +22,7 @@ impl SimpleComponent for WorkspacesItem {
     }
 
     fn init(
-        _init: Self::Init,
+        _: Self::Init,
         root: Self::Root,
         sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
@@ -60,15 +61,17 @@ impl SimpleComponent for WorkspacesItem {
             NiriMsg::WorkspaceActiveWindowChanged {
                 workspace_id,
                 active_window_id,
-            } => self
-                .workspaces
-                .broadcast(WorkspaceMsg::WorkspaceActiveWindowChanged {
+            } => self.workspaces.broadcast(
+                WorkspaceMsg::WorkspaceActiveWindowChanged {
                     workspace_id,
                     active_window_id,
-                }),
-            NiriMsg::WorkspaceUrgencyChanged { id, urgent } => self
-                .workspaces
-                .broadcast(WorkspaceMsg::WorkspaceUrgencyChanged { id, urgent }),
+                },
+            ),
+            NiriMsg::WorkspaceUrgencyChanged { id, urgent } => {
+                self.workspaces.broadcast(
+                    WorkspaceMsg::WorkspaceUrgencyChanged { id, urgent },
+                )
+            }
         }
     }
 }
@@ -130,7 +133,11 @@ impl FactoryComponent for Workspace {
         },
     }
 
-    fn init_model(init: Self::Init, _: &Self::Index, _: FactorySender<Self>) -> Self {
+    fn init_model(
+        init: Self::Init,
+        _: &Self::Index,
+        _: FactorySender<Self>,
+    ) -> Self {
         Self {
             id: init.id,
             idx: init.idx,
@@ -142,8 +149,12 @@ impl FactoryComponent for Workspace {
 
     fn update(&mut self, msg: Self::Input, sender: FactorySender<Self>) {
         match msg {
-            WorkspaceMsg::Clicked => sender.output(NiriCmd::FocusWorkspace(self.id)).unwrap(),
-            WorkspaceMsg::WorkspaceActivated { id } => self.is_active = id == self.id,
+            WorkspaceMsg::Clicked => sender
+                .output(NiriCmd::FocusWorkspace(self.id))
+                .or_warn("unhandled message"),
+            WorkspaceMsg::WorkspaceActivated { id } => {
+                self.is_active = id == self.id
+            }
             WorkspaceMsg::WorkspaceActiveWindowChanged {
                 workspace_id,
                 active_window_id,

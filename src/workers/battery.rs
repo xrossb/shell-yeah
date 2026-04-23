@@ -12,8 +12,10 @@ use zbus::{
     zvariant::{OwnedValue, Type},
 };
 
+use crate::util::ResultExt;
+
 pub struct BatteryWorker {
-    ct: CancellationToken,
+    _ct: CancellationToken,
 }
 
 #[derive(Clone, Debug)]
@@ -48,8 +50,10 @@ impl Worker for BatteryWorker {
                 }
             };
 
-            let mut percentage_changed = device.receive_percentage_changed().await;
-            let mut is_present_changed = device.receive_is_present_changed().await;
+            let mut percentage_changed =
+                device.receive_percentage_changed().await;
+            let mut is_present_changed =
+                device.receive_is_present_changed().await;
             loop {
                 select! {
                     _ = inner_ct.cancelled() => break,
@@ -67,7 +71,7 @@ impl Worker for BatteryWorker {
             }
         });
 
-        Self { ct }
+        Self { _ct: ct }
     }
 
     fn update(&mut self, _: Self::Input, _: relm4::ComponentSender<Self>) {}
@@ -90,9 +94,7 @@ async fn forward<P: TryFrom<OwnedValue> + Debug, F: FnOnce(P) -> BatteryMsg>(
 
     log::debug!("{} changed: {:?}", change.name(), value);
     let msg = map(value);
-    sender
-        .output(msg)
-        .unwrap_or_else(|_| log::warn!("cannot send message"));
+    sender.output(msg).or_warn("unhandled message");
 }
 
 #[proxy(

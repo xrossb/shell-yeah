@@ -4,9 +4,10 @@ use relm4::prelude::*;
 
 use crate::{
     shell::ShellMsg,
+    util::ResultExt,
     widgets::baritems::{
-        AudioItem, BatteryItem, BluetoothItem, ClockInit, ClockItem, LauncherItem, LogoutItem,
-        NetworkItem, WorkspacesItem,
+        AudioItem, BatteryItem, BluetoothItem, ClockInit, ClockItem,
+        LauncherItem, LogoutItem, NetworkItem, WorkspacesItem,
     },
     workers::NiriCmd,
 };
@@ -70,7 +71,7 @@ impl SimpleComponent for BarModule {
     }
 
     fn init(
-        _init: Self::Init,
+        _: Self::Init,
         root: Self::Root,
         sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
@@ -112,8 +113,14 @@ impl SimpleComponent for BarModule {
 
     fn update(&mut self, msg: Self::Input, _: ComponentSender<Self>) {
         match msg {
-            ShellMsg::Niri(msg) => self.workspaces.sender().send(msg).unwrap(),
-            ShellMsg::Battery(msg) => self.battery.sender().send(msg).unwrap(),
+            ShellMsg::Niri(msg) => self
+                .workspaces
+                .sender()
+                .send(msg)
+                .or_warn("unhandled message"),
+            ShellMsg::Battery(msg) => {
+                self.battery.sender().send(msg).or_warn("unhandled message")
+            }
             _ => (),
         }
     }

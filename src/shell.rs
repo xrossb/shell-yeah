@@ -4,11 +4,12 @@ use relm4::prelude::*;
 
 use crate::{
     modules::{BarModule, BarMsg},
+    util::ResultExt,
     workers::{BatteryMsg, BatteryWorker, NiriMsg, NiriWorker},
 };
 
 pub struct Shell {
-    battery: Controller<BatteryWorker>,
+    _battery: Controller<BatteryWorker>,
     niri: Controller<NiriWorker>,
     bar: Controller<BarModule>,
 }
@@ -35,7 +36,7 @@ impl SimpleComponent for Shell {
     }
 
     fn init(
-        _init: Self::Init,
+        _: Self::Init,
         root: Self::Root,
         sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
@@ -52,17 +53,24 @@ impl SimpleComponent for Shell {
             .launch(())
             .forward(sender.input_sender(), ShellMsg::Bar);
 
-        let model = Shell { battery, niri, bar };
+        let model = Shell {
+            _battery: battery,
+            niri,
+            bar,
+        };
         let widgets = view_output!();
 
         ComponentParts { model, widgets }
     }
 
-    fn update(&mut self, msg: Self::Input, _sender: ComponentSender<Self>) {
-        if let ShellMsg::Bar(BarMsg::WorkspacesMsg(cmd)) = msg.clone() {
-            self.niri.sender().send(cmd).unwrap();
+    fn update(&mut self, msg: Self::Input, _: ComponentSender<Self>) {
+        if let &ShellMsg::Bar(BarMsg::WorkspacesMsg(ref cmd)) = &msg {
+            self.niri
+                .sender()
+                .send(cmd.clone())
+                .or_warn("unhandled message");
         }
 
-        self.bar.sender().send(msg).unwrap();
+        self.bar.sender().send(msg).or_warn("unhandled message");
     }
 }

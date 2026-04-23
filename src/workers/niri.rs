@@ -1,4 +1,6 @@
-use niri_ipc::{Action, Event, Request, Workspace, WorkspaceReferenceArg, socket::Socket};
+use niri_ipc::{
+    Action, Event, Request, Workspace, WorkspaceReferenceArg, socket::Socket,
+};
 use relm4::{Worker, spawn_blocking};
 
 pub struct NiriWorker {
@@ -33,7 +35,7 @@ impl Worker for NiriWorker {
     type Input = NiriCmd;
     type Output = NiriMsg;
 
-    fn init(_init: Self::Init, sender: relm4::ComponentSender<Self>) -> Self {
+    fn init(_: Self::Init, sender: relm4::ComponentSender<Self>) -> Self {
         let command_socket = Socket::connect().ok();
         let event_socket = Socket::connect().ok();
 
@@ -52,7 +54,9 @@ impl Worker for NiriWorker {
                         Event::WorkspacesChanged { workspaces } => {
                             NiriMsg::WorkspacesChanged { workspaces }
                         }
-                        Event::WorkspaceActivated { id, .. } => NiriMsg::WorkspaceActivated { id },
+                        Event::WorkspaceActivated { id, .. } => {
+                            NiriMsg::WorkspaceActivated { id }
+                        }
                         Event::WorkspaceActiveWindowChanged {
                             workspace_id,
                             active_window_id,
@@ -74,11 +78,13 @@ impl Worker for NiriWorker {
         Self { command_socket }
     }
 
-    fn update(&mut self, msg: Self::Input, _sender: relm4::ComponentSender<Self>) {
+    fn update(&mut self, msg: Self::Input, _: relm4::ComponentSender<Self>) {
         match msg {
-            NiriCmd::FocusWorkspace(id) => self.send(Request::Action(Action::FocusWorkspace {
-                reference: WorkspaceReferenceArg::Id(id),
-            })),
+            NiriCmd::FocusWorkspace(id) => {
+                self.send(Request::Action(Action::FocusWorkspace {
+                    reference: WorkspaceReferenceArg::Id(id),
+                }))
+            }
         }
     }
 }

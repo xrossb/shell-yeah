@@ -8,6 +8,7 @@ use crate::shell::Shell;
 
 mod modules;
 mod shell;
+mod util;
 mod widgets;
 mod workers;
 
@@ -29,10 +30,12 @@ fn setup_styles() {
     struct Styles;
 
     for filename in Styles::iter() {
-        let file = Styles::get(&filename).expect("embedded style does not exist");
+        let file =
+            Styles::get(&filename).expect("embedded style does not exist");
         let style = rsass::compile_scss(&file.data, Default::default())
             .expect("error compiling stylesheet");
-        let style = str::from_utf8(&style).expect("embedded style is not utf-8");
+        let style =
+            str::from_utf8(&style).expect("embedded style is not utf-8");
         relm4::set_global_css(style);
     }
 }
@@ -41,7 +44,7 @@ fn setup_icons() {
     let display = gdk::Display::default().expect("cannot get gdk display");
     let theme = gtk::IconTheme::for_display(&display);
 
-    let home = std::env::home_dir().unwrap();
+    let home = std::env::home_dir().expect("cannot get home directory");
     theme.add_search_path(home.join(".config/shell-yeah/icons"));
 
     let datadir = std::env::var("DATADIR")
