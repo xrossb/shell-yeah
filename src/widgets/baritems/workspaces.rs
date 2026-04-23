@@ -40,11 +40,10 @@ impl SimpleComponent for WorkspacesItem {
 
     fn update(&mut self, msg: Self::Input, _: ComponentSender<Self>) {
         match msg {
-            NiriMsg::WorkspacesChanged { mut workspaces } => {
-                workspaces.sort_by(|a, b| a.idx.cmp(&b.idx));
+            NiriMsg::WorkspacesChanged { workspaces } => {
                 let mut guard = self.workspaces.guard();
                 guard.clear();
-                for ws in workspaces {
+                for ws in workspaces.as_ref() {
                     guard.push_back(Workspace {
                         id: ws.id,
                         idx: ws.idx,

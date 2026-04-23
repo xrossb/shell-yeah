@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use niri_ipc::{
     Action, Event, Request, Workspace, WorkspaceReferenceArg, socket::Socket,
 };
@@ -17,7 +19,7 @@ pub enum NiriCmd {
 #[derive(Clone, Debug)]
 pub enum NiriMsg {
     WorkspacesChanged {
-        workspaces: Vec<Workspace>,
+        workspaces: Arc<Vec<Workspace>>,
     },
     WorkspaceActivated {
         id: u64,
@@ -68,8 +70,11 @@ impl Worker for NiriWorker {
                     };
 
                     let msg = match event {
-                        Event::WorkspacesChanged { workspaces } => {
-                            NiriMsg::WorkspacesChanged { workspaces }
+                        Event::WorkspacesChanged { mut workspaces } => {
+                            workspaces.sort_by(|a, b| a.idx.cmp(&b.idx));
+                            NiriMsg::WorkspacesChanged {
+                                workspaces: Arc::new(workspaces),
+                            }
                         }
                         Event::WorkspaceActivated { id, .. } => {
                             NiriMsg::WorkspaceActivated { id }
