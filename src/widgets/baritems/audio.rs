@@ -21,7 +21,7 @@ impl SimpleComponent for AudioItem {
         root: Self::Root,
         _sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
-        let model = AudioItem;
+        let model = Self;
         let widgets = view_output!();
 
         ComponentParts { model, widgets }

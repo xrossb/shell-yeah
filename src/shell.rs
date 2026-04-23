@@ -4,7 +4,6 @@ use relm4::prelude::*;
 
 use crate::{
     modules::{BarModule, BarMsg},
-    util::ResultExt,
     workers::{BatteryMsg, BatteryWorker, NiriMsg, NiriWorker},
 };
 
@@ -65,12 +64,9 @@ impl SimpleComponent for Shell {
 
     fn update(&mut self, msg: Self::Input, _: ComponentSender<Self>) {
         if let &ShellMsg::Bar(BarMsg::WorkspacesMsg(ref cmd)) = &msg {
-            self.niri
-                .sender()
-                .send(cmd.clone())
-                .or_warn("unhandled message");
+            self.niri.sender().emit(cmd.clone());
         }
 
-        self.bar.sender().send(msg).or_warn("unhandled message");
+        self.bar.sender().emit(msg);
     }
 }

@@ -3,6 +3,8 @@ use niri_ipc::{
 };
 use relm4::{Worker, spawn_blocking};
 
+use crate::util::ResultExt;
+
 pub struct NiriWorker {
     command_socket: Option<Socket>,
 }
@@ -41,15 +43,30 @@ impl Worker for NiriWorker {
 
         if let Some(mut socket) = event_socket {
             spawn_blocking(move || {
-                socket
-                    .send(Request::EventStream)
-                    .expect("error connecting to niri")
-                    .expect("niri returned an error");
+                let res = match socket.send(Request::EventStream) {
+                    Err(err) => {
+                        log::warn!("cannot send niri request: {err}");
+                        return;
+                    }
+                    Ok(res) => res,
+                };
+
+                if let Err(err) = res {
+                    log::warn!("niri returned an error: {err}");
+                    return;
+                }
 
                 let mut read_event = socket.read_events();
 
                 loop {
-                    let event = read_event().expect("niri returned an error");
+                    let event = match read_event() {
+                        Err(err) => {
+                            log::warn!("niri returned an error: {err}");
+                            continue;
+                        }
+                        Ok(event) => event,
+                    };
+
                     let msg = match event {
                         Event::WorkspacesChanged { workspaces } => {
                             NiriMsg::WorkspacesChanged { workspaces }
@@ -70,7 +87,7 @@ impl Worker for NiriWorker {
                         _ => continue,
                     };
 
-                    sender.output(msg).expect("error sending output")
+                    sender.output(msg).or_warn("unhandled message")
                 }
             });
         }
@@ -96,9 +113,16 @@ impl NiriWorker {
             None => return,
         };
 
-        socket
-            .send(req)
-            .expect("error connecting to niri")
-            .expect("niri returned an error");
+        let res = match socket.send(req) {
+            Err(err) => {
+                log::warn!("cannot send niri request: {err}");
+                return;
+            }
+            Ok(res) => res,
+        };
+
+        if let Err(err) = res {
+            log::warn!("niri returned an error: {err}")
+        }
     }
 }

@@ -54,7 +54,7 @@ impl SimpleComponent for ClockItem {
             ControlFlow::Continue
         });
 
-        let model = ClockItem {
+        let model = Self {
             time: current_time(&init.format),
             format: init.format,
         };

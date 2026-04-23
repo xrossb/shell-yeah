@@ -25,6 +25,7 @@ impl SimpleComponent for BatteryItem {
             gtk::Image {
                 set_icon_name: Some("sy-battery-full"),
             },
+
             gtk::Label {
                 #[watch]
                 set_label: &format!("{:.0}%", model.percentage),

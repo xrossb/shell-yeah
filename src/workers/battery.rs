@@ -37,7 +37,7 @@ impl Worker for BatteryWorker {
             let conn = match Connection::system().await {
                 Ok(conn) => conn,
                 Err(err) => {
-                    log::warn!("cannot connect to system d-bus: {}", err);
+                    log::warn!("cannot connect to system d-bus: {err}");
                     return;
                 }
             };

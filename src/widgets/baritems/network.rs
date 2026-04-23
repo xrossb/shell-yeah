@@ -28,7 +28,7 @@ impl SimpleComponent for NetworkItem {
         root: Self::Root,
         _sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
-        let model = NetworkItem;
+        let model = Self;
         let widgets = view_output!();
 
         ComponentParts { model, widgets }

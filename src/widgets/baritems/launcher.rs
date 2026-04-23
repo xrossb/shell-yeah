@@ -21,7 +21,7 @@ impl SimpleComponent for LauncherItem {
         root: Self::Root,
         _sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
-        let model = LauncherItem;
+        let model = Self;
         let widgets = view_output!();
 
         ComponentParts { model, widgets }
