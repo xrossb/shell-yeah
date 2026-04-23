@@ -15,9 +15,9 @@ pub struct Shell {
 
 #[derive(Clone, Debug)]
 pub enum ShellMsg {
-    BatteryMsg(BatteryMsg),
-    NiriMsg(NiriMsg),
-    BarMsg(BarMsg),
+    Battery(BatteryMsg),
+    Niri(NiriMsg),
+    Bar(BarMsg),
 }
 
 #[relm4::component(pub)]
@@ -43,14 +43,14 @@ impl SimpleComponent for Shell {
 
         let battery = BatteryWorker::builder()
             .launch(())
-            .forward(sender.input_sender(), ShellMsg::BatteryMsg);
+            .forward(sender.input_sender(), ShellMsg::Battery);
         let niri = NiriWorker::builder()
             .launch(())
-            .forward(sender.input_sender(), ShellMsg::NiriMsg);
+            .forward(sender.input_sender(), ShellMsg::Niri);
 
         let bar = BarModule::builder()
             .launch(())
-            .forward(sender.input_sender(), ShellMsg::BarMsg);
+            .forward(sender.input_sender(), ShellMsg::Bar);
 
         let model = Shell { battery, niri, bar };
         let widgets = view_output!();
@@ -59,7 +59,7 @@ impl SimpleComponent for Shell {
     }
 
     fn update(&mut self, msg: Self::Input, _sender: ComponentSender<Self>) {
-        if let ShellMsg::BarMsg(BarMsg::WorkspacesMsg(cmd)) = msg.clone() {
+        if let ShellMsg::Bar(BarMsg::WorkspacesMsg(cmd)) = msg.clone() {
             self.niri.sender().send(cmd).unwrap();
         }
 

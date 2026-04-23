@@ -112,8 +112,8 @@ impl SimpleComponent for BarModule {
 
     fn update(&mut self, msg: Self::Input, _: ComponentSender<Self>) {
         match msg {
-            ShellMsg::NiriMsg(event) => self.workspaces.sender().send(event).unwrap(),
-            ShellMsg::BatteryMsg(msg) => self.battery.sender().send(msg).unwrap(),
+            ShellMsg::Niri(msg) => self.workspaces.sender().send(msg).unwrap(),
+            ShellMsg::Battery(msg) => self.battery.sender().send(msg).unwrap(),
             _ => (),
         }
     }

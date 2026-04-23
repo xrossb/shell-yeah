@@ -75,9 +75,8 @@ impl Worker for NiriWorker {
     }
 
     fn update(&mut self, msg: Self::Input, _sender: relm4::ComponentSender<Self>) {
-        use NiriCmd::*;
         match msg {
-            FocusWorkspace(id) => self.send(Request::Action(Action::FocusWorkspace {
+            NiriCmd::FocusWorkspace(id) => self.send(Request::Action(Action::FocusWorkspace {
                 reference: WorkspaceReferenceArg::Id(id),
             })),
         }

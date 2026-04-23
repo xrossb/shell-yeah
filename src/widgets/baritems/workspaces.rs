@@ -141,11 +141,10 @@ impl FactoryComponent for Workspace {
     }
 
     fn update(&mut self, msg: Self::Input, sender: FactorySender<Self>) {
-        use WorkspaceMsg::*;
         match msg {
-            Clicked => sender.output(NiriCmd::FocusWorkspace(self.id)).unwrap(),
-            WorkspaceActivated { id } => self.is_active = id == self.id,
-            WorkspaceActiveWindowChanged {
+            WorkspaceMsg::Clicked => sender.output(NiriCmd::FocusWorkspace(self.id)).unwrap(),
+            WorkspaceMsg::WorkspaceActivated { id } => self.is_active = id == self.id,
+            WorkspaceMsg::WorkspaceActiveWindowChanged {
                 workspace_id,
                 active_window_id,
             } => {
@@ -153,7 +152,7 @@ impl FactoryComponent for Workspace {
                     self.is_empty = active_window_id.is_none()
                 }
             }
-            WorkspaceUrgencyChanged { id, urgent } => {
+            WorkspaceMsg::WorkspaceUrgencyChanged { id, urgent } => {
                 if self.id == id {
                     self.is_urgent = urgent
                 }
