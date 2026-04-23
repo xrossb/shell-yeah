@@ -5,8 +5,8 @@ use relm4::prelude::*;
 use crate::{
     shell::ShellMsg,
     widgets::baritems::{
-        AudioItem, BatteryItem, BluetoothItem, ClockInit, ClockItem,
-        LauncherItem, LogoutItem, NetworkItem, WorkspacesItem,
+        Audio, Battery, Bluetooth, Clock, ClockInit, Launcher, Logout, Network,
+        Workspaces,
     },
     workers::NiriCmd,
 };
@@ -14,14 +14,14 @@ use crate::{
 const NAME: &str = "bar";
 
 pub struct BarModule {
-    audio: Controller<AudioItem>,
-    battery: Controller<BatteryItem>,
-    bluetooth: Controller<BluetoothItem>,
-    clock: Controller<ClockItem>,
-    launcher: Controller<LauncherItem>,
-    network: Controller<NetworkItem>,
-    poweroff: Controller<LogoutItem>,
-    workspaces: Controller<WorkspacesItem>,
+    audio: Controller<Audio>,
+    battery: Controller<Battery>,
+    bluetooth: Controller<Bluetooth>,
+    clock: Controller<Clock>,
+    launcher: Controller<Launcher>,
+    network: Controller<Network>,
+    logout: Controller<Logout>,
+    workspaces: Controller<Workspaces>,
 }
 
 #[derive(Clone, Debug)]
@@ -63,7 +63,7 @@ impl SimpleComponent for BarModule {
                     model.audio.widget(),
                     model.bluetooth.widget(),
                     model.network.widget(),
-                    model.poweroff.widget(),
+                    model.logout.widget(),
                 },
             },
         },
@@ -77,21 +77,21 @@ impl SimpleComponent for BarModule {
         root.init_layer_shell();
         root.auto_exclusive_zone_enable();
 
-        let audio = AudioItem::builder().launch(()).detach();
+        let audio = Audio::builder().launch(()).detach();
 
-        let battery = BatteryItem::builder().launch(()).detach();
+        let battery = Battery::builder().launch(()).detach();
 
-        let bluetooth = BluetoothItem::builder().launch(()).detach();
+        let bluetooth = Bluetooth::builder().launch(()).detach();
 
-        let clock = ClockItem::builder().launch(ClockInit::default()).detach();
+        let clock = Clock::builder().launch(ClockInit::default()).detach();
 
-        let launcher = LauncherItem::builder().launch(()).detach();
+        let launcher = Launcher::builder().launch(()).detach();
 
-        let network = NetworkItem::builder().launch(()).detach();
+        let network = Network::builder().launch(()).detach();
 
-        let poweroff = LogoutItem::builder().launch(()).detach();
+        let logout = Logout::builder().launch(()).detach();
 
-        let workspaces = WorkspacesItem::builder()
+        let workspaces = Workspaces::builder()
             .launch(())
             .forward(sender.output_sender(), BarMsg::WorkspacesMsg);
 
@@ -102,7 +102,7 @@ impl SimpleComponent for BarModule {
             clock,
             launcher,
             network,
-            poweroff,
+            logout,
             workspaces,
         };
         let widgets = view_output!();

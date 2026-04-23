@@ -1,10 +1,10 @@
 use relm4::gtk::prelude::*;
 use relm4::prelude::*;
 
-pub struct AudioItem;
+pub struct Audio;
 
 #[relm4::component(pub)]
-impl SimpleComponent for AudioItem {
+impl SimpleComponent for Audio {
     type Init = ();
     type Input = ();
     type Output = ();

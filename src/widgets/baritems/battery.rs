@@ -3,13 +3,13 @@ use relm4::prelude::*;
 
 use crate::workers::BatteryMsg;
 
-pub struct BatteryItem {
+pub struct Battery {
     is_present: bool,
     percentage: f64,
 }
 
 #[relm4::component(pub)]
-impl SimpleComponent for BatteryItem {
+impl SimpleComponent for Battery {
     type Init = ();
     type Input = BatteryMsg;
     type Output = ();

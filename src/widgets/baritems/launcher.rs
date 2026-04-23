@@ -1,10 +1,10 @@
 use relm4::gtk::prelude::*;
 use relm4::prelude::*;
 
-pub struct LauncherItem;
+pub struct Launcher;
 
 #[relm4::component(pub)]
-impl SimpleComponent for LauncherItem {
+impl SimpleComponent for Launcher {
     type Init = ();
     type Input = ();
     type Output = ();

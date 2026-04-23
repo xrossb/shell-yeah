@@ -4,12 +4,12 @@ use relm4::prelude::*;
 use crate::util::ResultExt;
 use crate::workers::{NiriCmd, NiriMsg};
 
-pub struct WorkspacesItem {
+pub struct Workspaces {
     workspaces: FactoryVecDeque<Workspace>,
 }
 
 #[relm4::component(pub)]
-impl SimpleComponent for WorkspacesItem {
+impl SimpleComponent for Workspaces {
     type Init = ();
     type Input = NiriMsg;
     type Output = NiriCmd;
@@ -30,7 +30,7 @@ impl SimpleComponent for WorkspacesItem {
             .launch(gtk::Box::default())
             .forward(sender.output_sender(), |msg| msg);
 
-        let model = WorkspacesItem { workspaces };
+        let model = Workspaces { workspaces };
 
         let workspaces_box = model.workspaces.widget();
         let widgets = view_output!();
@@ -43,7 +43,7 @@ impl SimpleComponent for WorkspacesItem {
             NiriMsg::WorkspacesChanged { workspaces } => {
                 let mut guard = self.workspaces.guard();
                 guard.clear();
-                for ws in workspaces.as_ref() {
+                for ws in workspaces.iter() {
                     guard.push_back(Workspace {
                         id: ws.id,
                         idx: ws.idx,

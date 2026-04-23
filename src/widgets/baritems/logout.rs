@@ -1,10 +1,10 @@
 use relm4::gtk::prelude::*;
 use relm4::prelude::*;
 
-pub struct LogoutItem;
+pub struct Logout;
 
 #[relm4::component(pub)]
-impl SimpleComponent for LogoutItem {
+impl SimpleComponent for Logout {
     type Init = ();
     type Input = ();
     type Output = ();

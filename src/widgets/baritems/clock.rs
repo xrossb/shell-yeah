@@ -4,7 +4,7 @@ use relm4::gtk::glib::{self, ControlFlow, DateTime};
 use relm4::gtk::prelude::*;
 use relm4::prelude::*;
 
-pub struct ClockItem {
+pub struct Clock {
     format: String,
     time: String,
 }
@@ -27,7 +27,7 @@ pub enum ClockCmd {
 }
 
 #[relm4::component(pub)]
-impl SimpleComponent for ClockItem {
+impl SimpleComponent for Clock {
     type Init = ClockInit;
     type Input = ClockCmd;
     type Output = ();

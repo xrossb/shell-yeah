@@ -1,10 +1,10 @@
 use relm4::gtk::prelude::*;
 use relm4::prelude::*;
 
-pub struct NetworkItem;
+pub struct Network;
 
 #[relm4::component(pub)]
-impl SimpleComponent for NetworkItem {
+impl SimpleComponent for Network {
     type Init = ();
     type Input = ();
     type Output = ();

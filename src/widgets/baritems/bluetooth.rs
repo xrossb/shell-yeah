@@ -1,10 +1,10 @@
 use relm4::gtk::prelude::*;
 use relm4::prelude::*;
 
-pub struct BluetoothItem;
+pub struct Bluetooth;
 
 #[relm4::component(pub)]
-impl SimpleComponent for BluetoothItem {
+impl SimpleComponent for Bluetooth {
     type Init = ();
     type Input = ();
     type Output = ();
