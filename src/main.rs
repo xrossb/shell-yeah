@@ -4,6 +4,8 @@ use relm4::gtk::gdk;
 use relm4::prelude::*;
 use rust_embed::Embed;
 
+use crate::shell::Shell;
+
 mod modules;
 mod shell;
 mod widgets;
@@ -18,7 +20,7 @@ fn main() {
     setup_icons();
     setup_styles();
 
-    app.run::<shell::Model>(());
+    app.run::<Shell>(());
 }
 
 fn setup_styles() {

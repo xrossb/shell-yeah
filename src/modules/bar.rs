@@ -3,36 +3,37 @@ use relm4::gtk::prelude::*;
 use relm4::prelude::*;
 
 use crate::{
-    shell,
+    shell::ShellMsg,
     widgets::baritems::{
-        audio, battery, bluetooth, clock, launcher, network, poweroff, workspaces,
+        AudioItem, BatteryItem, BluetoothItem, ClockInit, ClockItem, LauncherItem, LogoutItem,
+        NetworkItem, WorkspacesItem,
     },
-    workers::niri::NiriCmd,
+    workers::NiriCmd,
 };
 
 const NAME: &str = "bar";
 
-pub struct Model {
-    audio: Controller<audio::Model>,
-    battery: Controller<battery::Model>,
-    bluetooth: Controller<bluetooth::Model>,
-    clock: Controller<clock::Model>,
-    launcher: Controller<launcher::Model>,
-    network: Controller<network::Model>,
-    poweroff: Controller<poweroff::Model>,
-    workspaces: Controller<workspaces::Model>,
+pub struct BarModule {
+    audio: Controller<AudioItem>,
+    battery: Controller<BatteryItem>,
+    bluetooth: Controller<BluetoothItem>,
+    clock: Controller<ClockItem>,
+    launcher: Controller<LauncherItem>,
+    network: Controller<NetworkItem>,
+    poweroff: Controller<LogoutItem>,
+    workspaces: Controller<WorkspacesItem>,
 }
 
 #[derive(Clone, Debug)]
-pub enum Output {
-    WorkspacesEvent(NiriCmd),
+pub enum BarMsg {
+    WorkspacesMsg(NiriCmd),
 }
 
 #[relm4::component(pub)]
-impl SimpleComponent for Model {
+impl SimpleComponent for BarModule {
     type Init = ();
-    type Input = shell::Msg;
-    type Output = Output;
+    type Input = ShellMsg;
+    type Output = BarMsg;
 
     view! {
         gtk::Window {
@@ -76,27 +77,25 @@ impl SimpleComponent for Model {
         root.init_layer_shell();
         root.auto_exclusive_zone_enable();
 
-        let audio = audio::Model::builder().launch(()).detach();
+        let audio = AudioItem::builder().launch(()).detach();
 
-        let battery = battery::Model::builder().launch(()).detach();
+        let battery = BatteryItem::builder().launch(()).detach();
 
-        let bluetooth = bluetooth::Model::builder().launch(()).detach();
+        let bluetooth = BluetoothItem::builder().launch(()).detach();
 
-        let clock = clock::Model::builder()
-            .launch(clock::Init::default())
-            .detach();
+        let clock = ClockItem::builder().launch(ClockInit::default()).detach();
 
-        let launcher = launcher::Model::builder().launch(()).detach();
+        let launcher = LauncherItem::builder().launch(()).detach();
 
-        let network = network::Model::builder().launch(()).detach();
+        let network = NetworkItem::builder().launch(()).detach();
 
-        let poweroff = poweroff::Model::builder().launch(()).detach();
+        let poweroff = LogoutItem::builder().launch(()).detach();
 
-        let workspaces = workspaces::Model::builder()
+        let workspaces = WorkspacesItem::builder()
             .launch(())
-            .forward(sender.output_sender(), Output::WorkspacesEvent);
+            .forward(sender.output_sender(), BarMsg::WorkspacesMsg);
 
-        let model = Model {
+        let model = Self {
             audio,
             battery,
             bluetooth,
@@ -113,8 +112,8 @@ impl SimpleComponent for Model {
 
     fn update(&mut self, msg: Self::Input, _: ComponentSender<Self>) {
         match msg {
-            shell::Msg::NiriEvent(event) => self.workspaces.sender().send(event).unwrap(),
-            shell::Msg::BatteryMsg(msg) => self.battery.sender().send(msg).unwrap(),
+            ShellMsg::NiriMsg(event) => self.workspaces.sender().send(event).unwrap(),
+            ShellMsg::BatteryMsg(msg) => self.battery.sender().send(msg).unwrap(),
             _ => (),
         }
     }

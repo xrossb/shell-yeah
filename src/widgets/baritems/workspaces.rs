@@ -1,14 +1,14 @@
 use relm4::gtk::{gdk, prelude::*};
 use relm4::prelude::*;
 
-use crate::workers::niri::{NiriCmd, NiriMsg};
+use crate::workers::{NiriCmd, NiriMsg};
 
-pub struct Model {
+pub struct WorkspacesItem {
     workspaces: FactoryVecDeque<Workspace>,
 }
 
 #[relm4::component(pub)]
-impl SimpleComponent for Model {
+impl SimpleComponent for WorkspacesItem {
     type Init = ();
     type Input = NiriMsg;
     type Output = NiriCmd;
@@ -29,7 +29,7 @@ impl SimpleComponent for Model {
             .launch(gtk::Box::default())
             .forward(sender.output_sender(), |msg| msg);
 
-        let model = Model { workspaces };
+        let model = WorkspacesItem { workspaces };
 
         let workspaces_box = model.workspaces.widget();
         let widgets = view_output!();

@@ -4,16 +4,16 @@ use relm4::gtk::glib::{self, ControlFlow, DateTime};
 use relm4::gtk::prelude::*;
 use relm4::prelude::*;
 
-pub struct Model {
+pub struct ClockItem {
     format: String,
     time: String,
 }
 
-pub struct Init {
+pub struct ClockInit {
     format: String,
 }
 
-impl Default for Init {
+impl Default for ClockInit {
     fn default() -> Self {
         Self {
             format: "%a, %d %b · %-l:%M %P".to_string(),
@@ -22,14 +22,14 @@ impl Default for Init {
 }
 
 #[derive(Debug)]
-pub enum Msg {
+pub enum ClockCmd {
     Tick,
 }
 
 #[relm4::component(pub)]
-impl SimpleComponent for Model {
-    type Init = Init;
-    type Input = Msg;
+impl SimpleComponent for ClockItem {
+    type Init = ClockInit;
+    type Input = ClockCmd;
     type Output = ();
 
     view! {
@@ -50,11 +50,11 @@ impl SimpleComponent for Model {
         sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
         glib::timeout_add_local(Duration::from_secs(1), move || {
-            sender.input(Msg::Tick);
+            sender.input(ClockCmd::Tick);
             ControlFlow::Continue
         });
 
-        let model = Model {
+        let model = ClockItem {
             time: current_time(&init.format),
             format: init.format,
         };
@@ -65,7 +65,7 @@ impl SimpleComponent for Model {
 
     fn update(&mut self, message: Self::Input, _sender: ComponentSender<Self>) {
         match message {
-            Msg::Tick => self.time = current_time(&self.format),
+            ClockCmd::Tick => self.time = current_time(&self.format),
         }
     }
 }

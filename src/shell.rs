@@ -3,30 +3,27 @@ use relm4::gtk::prelude::*;
 use relm4::prelude::*;
 
 use crate::{
-    modules::bar,
-    workers::{
-        battery::{BatteryMsg, BatteryWorker},
-        niri::{NiriMsg, NiriWorker},
-    },
+    modules::{BarModule, BarMsg},
+    workers::{BatteryMsg, BatteryWorker, NiriMsg, NiriWorker},
 };
 
-pub struct Model {
+pub struct Shell {
     battery: Controller<BatteryWorker>,
     niri: Controller<NiriWorker>,
-    bar: Controller<bar::Model>,
+    bar: Controller<BarModule>,
 }
 
 #[derive(Clone, Debug)]
-pub enum Msg {
+pub enum ShellMsg {
     BatteryMsg(BatteryMsg),
-    NiriEvent(NiriMsg),
-    BarEvent(bar::Output),
+    NiriMsg(NiriMsg),
+    BarMsg(BarMsg),
 }
 
 #[relm4::component(pub)]
-impl SimpleComponent for Model {
+impl SimpleComponent for Shell {
     type Init = ();
-    type Input = Msg;
+    type Input = ShellMsg;
     type Output = ();
 
     view! {
@@ -46,23 +43,23 @@ impl SimpleComponent for Model {
 
         let battery = BatteryWorker::builder()
             .launch(())
-            .forward(sender.input_sender(), Msg::BatteryMsg);
+            .forward(sender.input_sender(), ShellMsg::BatteryMsg);
         let niri = NiriWorker::builder()
             .launch(())
-            .forward(sender.input_sender(), Msg::NiriEvent);
+            .forward(sender.input_sender(), ShellMsg::NiriMsg);
 
-        let bar = bar::Model::builder()
+        let bar = BarModule::builder()
             .launch(())
-            .forward(sender.input_sender(), Msg::BarEvent);
+            .forward(sender.input_sender(), ShellMsg::BarMsg);
 
-        let model = Model { battery, niri, bar };
+        let model = Shell { battery, niri, bar };
         let widgets = view_output!();
 
         ComponentParts { model, widgets }
     }
 
     fn update(&mut self, msg: Self::Input, _sender: ComponentSender<Self>) {
-        if let Msg::BarEvent(bar::Output::WorkspacesEvent(cmd)) = msg.clone() {
+        if let ShellMsg::BarMsg(BarMsg::WorkspacesMsg(cmd)) = msg.clone() {
             self.niri.sender().send(cmd).unwrap();
         }
 

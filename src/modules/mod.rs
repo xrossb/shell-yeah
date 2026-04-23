@@ -1,1 +1,3 @@
-pub mod bar;
+mod bar;
+
+pub use bar::{BarModule, BarMsg};

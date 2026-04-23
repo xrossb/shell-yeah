@@ -1,10 +1,10 @@
 use relm4::gtk::prelude::*;
 use relm4::prelude::*;
 
-pub struct Model;
+pub struct BluetoothItem;
 
 #[relm4::component(pub)]
-impl SimpleComponent for Model {
+impl SimpleComponent for BluetoothItem {
     type Init = ();
     type Input = ();
     type Output = ();
@@ -21,7 +21,7 @@ impl SimpleComponent for Model {
         root: Self::Root,
         _sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
-        let model = Model;
+        let model = BluetoothItem;
         let widgets = view_output!();
 
         ComponentParts { model, widgets }

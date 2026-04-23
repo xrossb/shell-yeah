@@ -1,15 +1,15 @@
 use relm4::gtk::prelude::*;
 use relm4::prelude::*;
 
-use crate::workers::battery::BatteryMsg;
+use crate::workers::BatteryMsg;
 
-pub struct Model {
+pub struct BatteryItem {
     is_present: bool,
     percentage: f64,
 }
 
 #[relm4::component(pub)]
-impl SimpleComponent for Model {
+impl SimpleComponent for BatteryItem {
     type Init = ();
     type Input = BatteryMsg;
     type Output = ();
