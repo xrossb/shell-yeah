@@ -13,7 +13,12 @@ mod widgets;
 mod workers;
 
 fn main() {
-    env_logger::Builder::from_env("LOG_LEVEL").init();
+    let log_level = std::env::var("LOG_LEVEL").unwrap_or_default();
+    let log_style = std::env::var("LOG_STYLE").unwrap_or_default();
+    env_logger::Builder::new()
+        .parse_filters(&log_level)
+        .parse_write_style(&log_style)
+        .init();
     log::info!("hello from shell-yeah");
 
     let app = RelmApp::new("shell-yeah.main");
