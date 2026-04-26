@@ -1,11 +1,12 @@
 use relm4::gtk::prelude::*;
 use relm4::prelude::*;
 
-use crate::workers::BatteryMsg;
+use crate::workers::{BatteryMsg, BatteryState};
 
 pub struct Battery {
     is_present: bool,
     percentage: f64,
+    state: BatteryState,
 }
 
 #[relm4::component(pub)]
@@ -41,6 +42,7 @@ impl SimpleComponent for Battery {
         let model = Self {
             is_present: false,
             percentage: 0.0,
+            state: BatteryState::Unknown,
         };
         let widgets = view_output!();
 
@@ -49,12 +51,9 @@ impl SimpleComponent for Battery {
 
     fn update(&mut self, msg: Self::Input, _: ComponentSender<Self>) {
         match msg {
-            BatteryMsg::PercentageChanged(percentage) => {
-                self.percentage = percentage
-            }
-            BatteryMsg::IsPresentChanged(is_present) => {
-                self.is_present = is_present
-            }
+            BatteryMsg::Percentage(percentage) => self.percentage = percentage,
+            BatteryMsg::IsPresent(is_present) => self.is_present = is_present,
+            BatteryMsg::State(state) => self.state = state,
         }
     }
 }

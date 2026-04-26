@@ -21,8 +21,9 @@ pub struct BatteryWorker {
 
 #[derive(Clone, Debug)]
 pub enum BatteryMsg {
-    PercentageChanged(f64),
-    IsPresentChanged(bool),
+    Percentage(f64),
+    IsPresent(bool),
+    State(DeviceState),
 }
 
 impl Worker for BatteryWorker {
@@ -55,19 +56,21 @@ impl Worker for BatteryWorker {
                 device.receive_percentage_changed().await;
             let mut is_present_changed =
                 device.receive_is_present_changed().await;
+            let mut state_changed = device.receive_device_state_changed().await;
             loop {
                 select! {
                     _ = inner_ct.cancelled() => break,
                     Some(prop) = percentage_changed.next() => forward(
                         prop,
                         &sender,
-                        BatteryMsg::PercentageChanged,
+                        BatteryMsg::Percentage,
                     ).await,
                     Some(prop) = is_present_changed.next() => forward(
                         prop,
                         &sender,
-                        BatteryMsg::IsPresentChanged,
+                        BatteryMsg::IsPresent,
                     ).await,
+                    Some(prop) = state_changed.next() => forward(prop, &sender, BatteryMsg::State).await,
                 };
             }
         });
@@ -173,10 +176,10 @@ enum DeviceType {
     BluetoothGeneric = 28,
 }
 
-#[derive(Type, OwnedValue, Serialize_repr, Deserialize_repr)]
+#[derive(Clone, Debug, Type, OwnedValue, Serialize_repr, Deserialize_repr)]
 #[non_exhaustive]
 #[repr(u32)]
-enum DeviceState {
+pub enum DeviceState {
     Unknown = 0,
     Charging = 1,
     Discharging = 2,
