@@ -6,7 +6,7 @@ use crate::{
     shell::ShellMsg,
     widgets::baritems::{
         Audio, Battery, Bluetooth, Clock, ClockInit, Launcher, Logout, Network,
-        Workspaces,
+        Tray, Workspaces,
     },
     workers::NiriCmd,
 };
@@ -19,8 +19,9 @@ pub struct BarModule {
     bluetooth: Controller<Bluetooth>,
     clock: Controller<Clock>,
     launcher: Controller<Launcher>,
-    network: Controller<Network>,
     logout: Controller<Logout>,
+    network: Controller<Network>,
+    tray: Controller<Tray>,
     workspaces: Controller<Workspaces>,
 }
 
@@ -59,6 +60,7 @@ impl SimpleComponent for BarModule {
 
                 #[wrap(Some)]
                 set_end_widget = &gtk::Box {
+                    model.tray.widget(),
                     model.battery.widget(),
                     model.audio.widget(),
                     model.bluetooth.widget(),
@@ -87,9 +89,11 @@ impl SimpleComponent for BarModule {
 
         let launcher = Launcher::builder().launch(()).detach();
 
+        let logout = Logout::builder().launch(()).detach();
+
         let network = Network::builder().launch(()).detach();
 
-        let logout = Logout::builder().launch(()).detach();
+        let tray = Tray::builder().launch(()).detach();
 
         let workspaces = Workspaces::builder()
             .launch(())
@@ -101,8 +105,9 @@ impl SimpleComponent for BarModule {
             bluetooth,
             clock,
             launcher,
-            network,
             logout,
+            network,
+            tray,
             workspaces,
         };
         let widgets = view_output!();

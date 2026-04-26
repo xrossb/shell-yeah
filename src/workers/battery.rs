@@ -15,6 +15,7 @@ use zbus::{
 use crate::util::ResultExt;
 
 pub struct BatteryWorker {
+    // TODO: shutdown?
     _ct: CancellationToken,
 }
 
@@ -138,6 +139,7 @@ trait Device {
 }
 
 #[derive(Type, OwnedValue, Serialize_repr, Deserialize_repr)]
+#[non_exhaustive]
 #[repr(u32)]
 enum DeviceType {
     Unknown = 0,
@@ -172,6 +174,7 @@ enum DeviceType {
 }
 
 #[derive(Type, OwnedValue, Serialize_repr, Deserialize_repr)]
+#[non_exhaustive]
 #[repr(u32)]
 enum DeviceState {
     Unknown = 0,
@@ -184,6 +187,7 @@ enum DeviceState {
 }
 
 #[derive(Type, OwnedValue, Serialize_repr, Deserialize_repr)]
+#[non_exhaustive]
 #[repr(u32)]
 enum WarningLevel {
     Unknown = 0,

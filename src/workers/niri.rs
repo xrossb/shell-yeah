@@ -8,6 +8,7 @@ use relm4::{Worker, spawn_blocking};
 use crate::util::ResultExt;
 
 pub struct NiriWorker {
+    // TODO: shutdown?
     command_socket: Option<Socket>,
 }
 

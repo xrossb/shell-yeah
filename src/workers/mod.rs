@@ -1,4 +1,5 @@
 mod battery;
+mod network;
 mod niri;
 
 pub use battery::{BatteryMsg, BatteryWorker};
